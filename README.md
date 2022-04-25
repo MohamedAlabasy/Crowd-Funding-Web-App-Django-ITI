@@ -15,7 +15,6 @@ The aim of the project: Create a web platform for starting fundraise projects in
 git clone https://github.com/MohamedAlabasy/Crowd-Funding-Web-App-Django-ITI.git
 ```
 
- 
 
 `Step 3` :  Enter the project file then ...
 ```
@@ -39,7 +38,7 @@ python manage.py migrate
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  `To help you understand the project databases, see the following ERF`
 <h3 align="center"> DataBase ERD </h3>
 <p align="center">
-   <img src="https://user-images.githubusercontent.com/93389016/165145497-e0ab556a-53bf-478b-8878-47595bacede3.png" alt="Database ERD">
+   <img src="https://user-images.githubusercontent.com/93389016/165175159-c842572f-25c8-43ba-b2e0-cc26f553c209.png" alt="Database ERD">
 </p>
 
 
