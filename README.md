@@ -39,7 +39,7 @@ python manage.py migrate
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  `To help you understand the project databases, see the following ERF`
 <h3 align="center"> DataBase ERD </h3>
 <p align="center">
-   <img src="https://user-images.githubusercontent.com/93389016/165126028-d901ab4f-37ef-4971-be9c-7b3461666160.png" alt="Database ERD">
+   <img src="https://user-images.githubusercontent.com/93389016/165145497-e0ab556a-53bf-478b-8878-47595bacede3.png" alt="Database ERD">
 </p>
 
 
