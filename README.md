@@ -11,10 +11,9 @@
 git clone https://github.com/MohamedAlabasy/Crowd-Funding-Web-App-Django-ITI.git
 ```
 
-`Step 3` :  
-&nbsp; &nbsp; &nbsp; &nbsp; Create database call `crowd_funding` .  
+ 
 
-`Step 4` :  Enter the project file then ...
+`Step 3` :  Enter the project file then ...
 ```
 py -m venv .venv
 ```
@@ -27,6 +26,8 @@ pip install -r requirements.txt
 ```
 winpty python manage.py runserver
 ```
+`Step 4` :  
+&nbsp; &nbsp; &nbsp; &nbsp; Create database call `crowd_funding` then ...
 ```
 python manage.py migrate
 ```
