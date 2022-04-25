@@ -6,11 +6,30 @@
 &nbsp; &nbsp; &nbsp; &nbsp; You must have installed virtual server i.e XAMPP on your PC (for Windows). This System in PHP with source code   
 &nbsp; &nbsp; &nbsp; &nbsp; is free to download, Use for educational purposes only! .  
 
-`Step 2` :  
-&nbsp; &nbsp; &nbsp; &nbsp; Download the source code .
+`Step 2` :  Download the source code .
+```
+git clone https://github.com/MohamedAlabasy/Crowd-Funding-Web-App-Django-ITI.git
+```
 
 `Step 3` :  
-&nbsp; &nbsp; &nbsp; &nbsp; Create database call `gym` .  
+&nbsp; &nbsp; &nbsp; &nbsp; Create database call `crowd_funding` .  
+
+`Step 4` :  Enter the project file then ...
+```
+py -m venv .venv
+```
+```
+source .venv/Scripts/activate
+```
+```
+pip install -r requirements.txt
+```
+```
+winpty python manage.py runserver
+```
+```
+python manage.py migrate
+```
 
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  `To help you understand the project databases, see the following ERF`
 <h3 align="center"> DataBase ERD </h3>
