@@ -1,53 +1,46 @@
-from django.shortcuts import render
-import json
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
-
-from django.http import HttpResponse
 
 # Create your views here.
 
-
+@api_view(['GET'])
 def list_users(request):
-    if request.method == 'GET':
-        try:
-            response = json.dumps([
-                {
-                    "first_name": "Mohamed",
-                    "last_name": "Alabasy",
-                    "age": 24
-                },
-                {
-                    "first_name": "mona",
-                    "last_name": "ahmed",
-                    "age": 22
-                }
-            ])
-        except:
-            response = json.dumps([
-                {
-                    "msg": "No Data To show",
-                }
-            ])
-    return HttpResponse(response, content_type='text/json')
+    try:
+        response = ([
+            {
+                "first_name": "Mohamed",
+                "last_name": "Alabasy",
+                "age": 24
+            },
+            {
+                "first_name": "mona",
+                "last_name": "ahmed",
+                "age": 22
+            }
+        ])
+    except:
+        response = ([
+            {
+                "msg": "No Data To show",
+            }
+        ])
+    return Response(response)
 
 
 @csrf_exempt
+@api_view(['POST'])
 def create_user(request):
-    if request.method == 'POST':
-        body_data = json.loads(request.body)
-        name = body_data['name']
-        try:
-            response = json.dumps([
-                {
-                    "name": name
-                }
-            ])
-        except:
-            response = json.dumps([
-                {
-                    "msg": "No Data To show",
-                }
-            ])
-    return HttpResponse(response, content_type='text/json')
+    body_data = request.data
+    try:
+        response = ([
+            body_data
+        ])
+    except:
+        response = ([
+            {
+                "msg": "No Data To show",
+            }
+        ])
+    return Response(response)
