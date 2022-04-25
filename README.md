@@ -1,6 +1,10 @@
-# Crowd-Funding-Web-App-Django-ITI
+<h1 align="center"> Crowd Funding Web App </h1>
 
-## To run this project  
+## Description :  
+Crowdfunding is the practice of funding a project or venture by raising small amounts of money from a large number of people, typically via the Internet. Crowdfunding is a form of crowdsourcing and alternative finance. In 2015, over US$34 billion was raised worldwide by crowdfunding.
+The aim of the project: Create a web platform for starting fundraise projects in Egypt. 
+
+## To run this project :   
 
 `Step 1` :  
 &nbsp; &nbsp; &nbsp; &nbsp; You must have installed virtual server i.e XAMPP on your PC (for Windows). This System in PHP with source code   
@@ -35,7 +39,7 @@ python manage.py migrate
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  `To help you understand the project databases, see the following ERF`
 <h3 align="center"> DataBase ERD </h3>
 <p align="center">
-   <img src="https://user-images.githubusercontent.com/93389016/157979950-d67cd8ca-0e50-4ca0-9c6c-263883ad1a73.jpg" alt="Build Status">
+   <img src="https://user-images.githubusercontent.com/93389016/165126028-d901ab4f-37ef-4971-be9c-7b3461666160.png" alt="Database ERD">
 </p>
 
 
