@@ -8,6 +8,9 @@ class User(models.Model):
     mobile_phone = models.CharField( max_length=150, blank=False)
     email = models.EmailField( blank=False,unique=True)
     profile_image = models.ImageField (max_length=255, upload_to="img/%y",null=True)
+    Birth_date=models.DateField(null=True)
+    facebook_profile=models.URLField(max_length = 200,null=True)
+
 
     email_verified=models.BooleanField(null=True)
     @property
