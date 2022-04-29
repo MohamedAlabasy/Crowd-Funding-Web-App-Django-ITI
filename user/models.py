@@ -7,6 +7,8 @@ class User(models.Model):
     password = models.CharField(max_length=150, blank=False)
     mobile_phone = models.CharField( max_length=150, blank=False)
     email = models.EmailField( blank=False,unique=True)
+    profile_image = models.ImageField (max_length=255, upload_to="img/%y",null=True)
+
     email_verified=models.BooleanField(null=True)
     @property
     def token(self):

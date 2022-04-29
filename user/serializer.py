@@ -7,7 +7,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = User
-        fields = ('first_name', 'last_name', 'email','password','mobile_phone')
+        fields = ('first_name', 'last_name', 'email','password','mobile_phone','profile_image')
         # which data will be sent 
     def create(self, validated_data):
         
@@ -16,5 +16,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             last_name  = validated_data['last_name'],
             email = validated_data['email'],
             password = make_password(validated_data['password']),
-            mobile_phone = validated_data['mobile_phone']
+            mobile_phone = validated_data['mobile_phone'],
+            profile_image = validated_data['profile_image']
             )
