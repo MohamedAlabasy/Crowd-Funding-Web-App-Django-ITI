@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',  # for create api end point
     'users',
-    'projects'
+    'projects',
+    'user.apps.UserConfig',
+
+
 ]
 
 MIDDLEWARE = [
