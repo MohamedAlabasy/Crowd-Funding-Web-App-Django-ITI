@@ -1,6 +1,9 @@
 from django.contrib import admin
 from .models import Categories, Tags, Projects, Pictures, Comments, Replies, Reports, Donations
-# Register your models here.
+
+#=======================================================================================#
+#			                           Register models                                  #
+#=======================================================================================#
 admin.site.register(Categories)
 admin.site.register(Tags)
 admin.site.register(Projects)
