@@ -33,7 +33,7 @@ class RegisterApiView(GenericAPIView):
 def user_profile(request, user_id):
     try:
         query = User.objects.get(id=user_id)
-        response = getUserDonations()(query, read_only=True).data,
+        response = getUserProfile(query, read_only=True).data,
     except:
         if User.DoesNotExist:
             response = ([
@@ -103,3 +103,62 @@ def user_donations(request, user_id):
             ])
 
     return Response(response)
+
+#=======================================================================================#
+#                                  update_user user Data                                #
+#=======================================================================================#
+
+
+# @api_view(['POST'])
+# def update_user(request, user_id):
+#     # try:
+#     query = User.objects.get(id=user_id)
+    # response = getUserProfile(data=request.data)
+    # response = request.data
+    # if response.is_valid():
+    #     response.save()
+    # except:
+    # return Response(status=status.HTTP_404_NOT_FOUND)
+    # if User.DoesNotExist:
+    #     response = ([
+    #         {
+    #             "message": f"There is no user with this id = {user_id}",
+    #         }
+    #     ])
+    # else:
+    #     response = ([
+    #         {
+    #             "message": "no data to show",
+    #         }
+    #     ])
+
+    # if request.method == 'PUT':
+    # serializer = getUserProfile(instance=query, data=request.POST)
+    # serializer = request.data
+    # serializer.save()
+    # serializer.save()
+    # print(serializer.is_valid())
+    # if serializer.is_valid():
+    #     serializer.save()
+    #     serializer = ([
+    #         {
+    #             "message": "SSS",
+    #         }
+    #     ])
+    #     return Response(serializer)
+    # return Response(serializer.data)
+
+
+#=======================================================================================#
+#			                            getUserDonations                               	#
+#=======================================================================================#
+
+@api_view(['DELETE'])
+def delete_user(request, user_id):
+    User.objects.get(id=user_id).delete()
+    serializer = ([
+        {
+            "message": "SSS",
+        }
+    ])
+    return Response(serializer)
