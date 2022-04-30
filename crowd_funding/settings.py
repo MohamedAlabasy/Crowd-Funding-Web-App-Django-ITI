@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',  # for create api end point
-    'users',
     'projects',
     'user.apps.UserConfig',
 
