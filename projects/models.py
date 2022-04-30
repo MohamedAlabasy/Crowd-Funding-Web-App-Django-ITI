@@ -40,7 +40,7 @@ class Pictures(models.Model):
     project = models.ForeignKey(Projects, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.image
+        return self.project
 
 #=======================================================================================#
 #			                            comments                                     	#
@@ -48,10 +48,22 @@ class Pictures(models.Model):
 class Comments(models.Model):
     comment = models.TextField(blank=True)
     project = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.comment
-    
+        return (f"{self.user} on {self.project}")
+
+#=======================================================================================#
+#			                            Replies                                     	#
+#=======================================================================================#
+class Replies(models.Model):
+    replie = models.TextField(blank=True)
+    comment = models.ForeignKey(Comments, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return (f"{self.user} on {self.comment}")
+
 #=======================================================================================#
 #			                            Reports                                     	#
 #=======================================================================================#
@@ -61,4 +73,15 @@ class Reports(models.Model):
     comment = models.ForeignKey(Comments, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.reason
+        return (f"{self.project} {self.comment}")
+
+#=======================================================================================#
+#			                            Donations                                     	#
+#=======================================================================================#
+class Donations(models.Model):
+    paid_up = models.TextField(blank=True)
+    project = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return (f"{self.user} Donate to {self.project}")
