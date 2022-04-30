@@ -43,9 +43,8 @@ INSTALLED_APPS = [
 
     'user.apps.UserConfig',
     'projects',
+
     "corsheaders",
-
-
 
 ]
 
