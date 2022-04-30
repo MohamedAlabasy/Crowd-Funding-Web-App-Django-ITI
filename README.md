@@ -34,6 +34,10 @@ winpty python manage.py runserver
 ```
 python manage.py migrate
 ```
+`Step 5` :  To Create Admin Account : 
+```
+python manage.py createsuperuser
+```
 
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  `To help you understand the project databases, see the following ERF`
 <h3 align="center"> DataBase ERD </h3>
