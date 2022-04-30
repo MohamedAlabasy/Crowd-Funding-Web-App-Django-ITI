@@ -1,6 +1,6 @@
 from rest_framework.generics import GenericAPIView
 from rest_framework import response, status
-from .serializer import RegisterSerializer, viewUserProfile, viewUserProjects
+from .serializer import RegisterSerializer, getUserProfile, getUserProjects
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -33,7 +33,7 @@ class RegisterApiView(GenericAPIView):
 def view_user_profile(request, user_id):
     try:
         query = User.objects.get(id=user_id)
-        response = viewUserProfile(query, read_only=True).data,
+        response = getUserProfile(query, read_only=True).data,
     except:
         if User.DoesNotExist:
             response = ([
@@ -59,7 +59,7 @@ def view_user_profile(request, user_id):
 def view_user_projects(request, user_id):
     try:
         query = Projects.objects.filter(owner_id=user_id).all()
-        response = viewUserProjects(
+        response = getUserProjects(
             query, many=True, read_only=True).data,
     except:
         if Projects.DoesNotExist:

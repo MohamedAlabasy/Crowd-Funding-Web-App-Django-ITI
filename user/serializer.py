@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import User
 from django.contrib.auth.hashers import make_password
 from projects.models import Projects
-# from projects.serializers import Projects
+from projects.serializers import getCategories, getTags
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -29,7 +29,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
 
 
-class viewUserProfile(serializers.ModelSerializer):
+class getUserProfile(serializers.ModelSerializer):
     class Meta:
         model = User
         # fields = "__all__"
@@ -46,10 +46,10 @@ class viewUserProfile(serializers.ModelSerializer):
         ]
 
 
-class viewUserProjects(serializers.ModelSerializer):
-    owner = viewUserProfile(read_only=True)
-    # category = viewUserProfile(read_only=True)
-    # tag = viewUserProfile(many=true,read_only=True)
+class getUserProjects(serializers.ModelSerializer):
+    owner = getUserProfile(read_only=True)
+    category = getCategories(read_only=True)
+    tag = getTags(many=True, read_only=True)
 
     class Meta:
         model = Projects
