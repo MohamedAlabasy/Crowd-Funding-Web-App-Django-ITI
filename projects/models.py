@@ -1,12 +1,11 @@
 from django.db import models
 from django.utils import timezone
+from user.models import User
 
 
 #=======================================================================================#
 #			                            Categone                                    	#
 #=======================================================================================#
-
-
 class Categories(models.Model):
     name = models.CharField(max_length=250)
 
@@ -17,8 +16,6 @@ class Categories(models.Model):
 #=======================================================================================#
 #			                            Project                                     	#
 #=======================================================================================#
-
-
 class Projects(models.Model):
     title = models.CharField(max_length=250, unique=True)
     details = models.TextField(blank=True)
@@ -29,7 +26,18 @@ class Projects(models.Model):
     end_campaign = models.DateTimeField()
     created_at = models.DateTimeField(default=timezone.now)
     selected_at_by_admin = models.DateTimeField(null=True)
-    categories = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
+
+#=======================================================================================#
+#			                            Pictures                                     	#
+#=======================================================================================#
+class Pictures(models.Model):
+    image = models.ImageField(max_length=255, upload_to="img/%y", null=True)
+    project = models.ForeignKey(Projects, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.image
