@@ -96,3 +96,13 @@ class Tags(models.Model):
 
     def __str__(self):
         return self.name
+    
+#=======================================================================================#
+#			                        project has tags                                   	#
+#=======================================================================================#
+class project_has_tags(models.Model):
+    project = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tags, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return (f"{self.project} has {self.project}")
