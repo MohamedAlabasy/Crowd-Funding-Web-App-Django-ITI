@@ -34,3 +34,9 @@ class createComment(serializers.ModelSerializer):
     class Meta:
         model = Comments
         fields = "__all__"
+
+
+class CommentReply(serializers.ModelSerializer):
+    class Meta:
+        model = Replies
+        fields = "__all__"
