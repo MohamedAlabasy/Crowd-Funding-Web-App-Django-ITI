@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import User
 from django.contrib.auth.hashers import make_password
+from projects.models import Projects
+# from projects.serializers import Projects
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -35,6 +37,7 @@ class viewUserProfile(serializers.ModelSerializer):
         model = User
         # fields = "__all__"
         fields = [
+            'id',
             'first_name',
             'last_name',
             'password',
@@ -43,4 +46,27 @@ class viewUserProfile(serializers.ModelSerializer):
             'Birth_date',
             'facebook_profile',
             # 'country'
+        ]
+
+
+class viewUserProjects(serializers.ModelSerializer):
+    owner = viewUserProfile(read_only=True)
+    # category = viewUserProfile(read_only=True)
+    # tag = viewUserProfile(many=true,read_only=True)
+
+    class Meta:
+        model = Projects
+        fields = [
+            'id',
+            'title',
+            'details',
+            'rate',
+            'total_target',
+            'current_donation',
+            'start_campaign',
+            'end_campaign',
+            'created_at',
+            'category',
+            'owner',
+            'tag',
         ]

@@ -1,10 +1,11 @@
 from rest_framework.generics import GenericAPIView
 from rest_framework import response, status
-from .serializer import RegisterSerializer, viewUserProfile
+from .serializer import RegisterSerializer, viewUserProfile, viewUserProjects
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import User
+from projects.models import Projects
 
 
 # Create your views here.
@@ -23,21 +24,48 @@ class RegisterApiView(GenericAPIView):
 
         return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-#=======================================================================================#
-#			                            Replies                                     	#
-#=======================================================================================#
 
+#=======================================================================================#
+#			                          view user profile                                	#
+#=======================================================================================#
 
 @api_view(['GET'])
 def view_user_profile(request, user_id):
     try:
         query = User.objects.get(id=user_id)
-        response = viewUserProfile(query).data,
+        response = viewUserProfile(query, read_only=True).data,
     except:
         if User.DoesNotExist:
             response = ([
                 {
                     "message": f"There is no user with this id {user_id}",
+                }
+            ])
+        else:
+            response = ([
+                {
+                    "message": "no data to show",
+                }
+            ])
+
+    return Response(response)
+
+#=======================================================================================#
+#                                   view user projects                                  #
+#=======================================================================================#
+
+
+@api_view(['GET'])
+def view_user_projects(request, user_id):
+    try:
+        query = Projects.objects.filter(owner_id=user_id).all()
+        response = viewUserProjects(
+            query, many=True, read_only=True).data,
+    except:
+        if Projects.DoesNotExist:
+            response = ([
+                {
+                    "message": f"There is no user with this id = {user_id}",
                 }
             ])
         else:
