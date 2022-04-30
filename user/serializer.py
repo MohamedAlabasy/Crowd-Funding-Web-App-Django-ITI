@@ -15,7 +15,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ('first_name', 'last_name', 'email', 'password',
                   'mobile_phone', 'profile_image', 'confirm_password')
-    
+
         # which data will be sent
 
     def create(self, validated_data):
@@ -32,18 +32,18 @@ class RegisterSerializer(serializers.ModelSerializer):
 class getUserProfile(serializers.ModelSerializer):
     class Meta:
         model = User
-        # fields = "__all__"
-        fields = [
-            'id',
-            'first_name',
-            'last_name',
-            'password',
-            'mobile_phone',
-            'profile_image',
-            'Birth_date',
-            'facebook_profile',
-            # 'country'
-        ]
+        fields = "__all__"
+        # fields = [
+        #     'id',
+        #     'first_name',
+        #     'last_name',
+        #     'password',
+        #     'mobile_phone',
+        #     'profile_image',
+        #     'Birth_date',
+        #     'facebook_profile',
+        #     'country'
+        # ]
 
 
 class getUserProjects(serializers.ModelSerializer):
@@ -53,6 +53,7 @@ class getUserProjects(serializers.ModelSerializer):
 
     class Meta:
         model = Projects
+
         fields = [
             'id',
             'title',
