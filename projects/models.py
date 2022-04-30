@@ -86,3 +86,13 @@ class Donations(models.Model):
 
     def __str__(self):
         return (f"{self.user} Donate to {self.project}")
+    
+#=======================================================================================#
+#			                              Tags                                         	#
+#=======================================================================================#
+class Tags(models.Model):
+    name = models.CharField(max_length=250, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
