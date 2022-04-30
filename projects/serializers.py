@@ -28,5 +28,23 @@ class getTags(serializers.ModelSerializer):
         # ]
 
 #=======================================================================================#
+#			                               getProjects                                  #
+#=======================================================================================#
+
+
+class getProjects(serializers.ModelSerializer):
+    category = getCategories(read_only=True)
+    tag = getTags(many=True, read_only=True)
+
+    class Meta:
+        model = Projects
+
+        fields = "__all__"
+        # fields = [
+        #     "id",
+        #     "name"
+        # ]
+
+#=======================================================================================#
 #			                            0                                     	#
 #=======================================================================================#
