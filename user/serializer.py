@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from .models import User
 from django.contrib.auth.hashers import make_password
-from projects.models import Projects
-from projects.serializers import getCategories, getTags
+from projects.models import Projects, Donations
+from projects.serializers import getCategories, getTags, getProjects
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -28,6 +28,10 @@ class RegisterSerializer(serializers.ModelSerializer):
             profile_image=validated_data['profile_image'],
         )
 
+#=======================================================================================#
+#			                            getUserProfile                                 	#
+#=======================================================================================#
+
 
 class getUserProfile(serializers.ModelSerializer):
     class Meta:
@@ -44,6 +48,11 @@ class getUserProfile(serializers.ModelSerializer):
         #     'facebook_profile',
         #     'country'
         # ]
+
+
+#=======================================================================================#
+#			                            getUserProjects                                	#
+#=======================================================================================#
 
 
 class getUserProjects(serializers.ModelSerializer):
@@ -68,3 +77,32 @@ class getUserProjects(serializers.ModelSerializer):
             'owner',
             'tag',
         ]
+
+
+#=======================================================================================#
+#			                            getUserDonations                               	#
+#=======================================================================================#
+
+
+class getUserDonations(serializers.ModelSerializer):
+    user = getUserProfile(read_only=True)
+    project = getProjects(read_only=True)
+
+    class Meta:
+        model = Donations
+
+        fields = '__all__'
+        # fields = [
+        #     'id',
+        #     'title',
+        #     'details',
+        #     'rate',
+        #     'total_target',
+        #     'current_donation',
+        #     'start_campaign',
+        #     'end_campaign',
+        #     'created_at',
+        #     'category',
+        #     'owner',
+        #     'tag',
+        # ]
