@@ -71,9 +71,10 @@ class Reports(models.Model):
     reason = models.TextField(blank=True)
     project = models.ForeignKey(Projects, on_delete=models.CASCADE, null=True)
     comment = models.ForeignKey(Comments, on_delete=models.CASCADE, null=True)
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
+    
     def __str__(self):
-        return (f"{self.project} {self.comment}")
+        return (f"{self.project} {self.comment} by {self.user}")
 
 #=======================================================================================#
 #			                            Donations                                     	#
