@@ -27,6 +27,10 @@ SECRET_KEY = 'django-insecure-dbs8w-7pm+g1wv+&j&w_0w)a&i0@mtm$z0&xhz0@#kb34xne_^
 DEBUG = True
 
 ALLOWED_HOSTS = []
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:4200',
+],
 
 
 # Application definition
@@ -42,11 +46,15 @@ INSTALLED_APPS = [
 
     'projects',
     'user.apps.UserConfig',
+    "corsheaders",
+
 
 
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,6 +62,32 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+
+]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",
+    "http://localhost:3000",
+
+]
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
 ]
 
 ROOT_URLCONF = 'crowd_funding.urls'
@@ -84,7 +118,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'crowd_funding',
         'USER': 'root',
-        'PASSWORD': '8101419',
+        'PASSWORD': '123456789',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
