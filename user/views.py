@@ -1,11 +1,11 @@
 from rest_framework.generics import GenericAPIView
 from rest_framework import response, status
-from .serializer import RegisterSerializer, getUserProfile, getUserProjects
+from .serializer import RegisterSerializer, getUserProfile, getUserProjects, getUserDonations
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import User
-from projects.models import Projects
+from projects.models import Projects, Donations
 
 
 # Create your views here.
@@ -30,10 +30,10 @@ class RegisterApiView(GenericAPIView):
 #=======================================================================================#
 
 @api_view(['GET'])
-def view_user_profile(request, user_id):
+def user_profile(request, user_id):
     try:
         query = User.objects.get(id=user_id)
-        response = getUserProfile(query, read_only=True).data,
+        response = getUserDonations()(query, read_only=True).data,
     except:
         if User.DoesNotExist:
             response = ([
@@ -56,10 +56,37 @@ def view_user_profile(request, user_id):
 
 
 @api_view(['GET'])
-def view_user_projects(request, user_id):
+def user_projects(request, user_id):
     try:
         query = Projects.objects.filter(owner_id=user_id).all()
         response = getUserProjects(
+            query, many=True, read_only=True).data,
+    except:
+        if Projects.DoesNotExist:
+            response = ([
+                {
+                    "message": f"There is no user with this id = {user_id}",
+                }
+            ])
+        else:
+            response = ([
+                {
+                    "message": "no data to show",
+                }
+            ])
+
+    return Response(response)
+
+#=======================================================================================#
+#                                  view user Donations                                  #
+#=======================================================================================#
+
+
+@api_view(['GET'])
+def user_donations(request, user_id):
+    try:
+        query = Donations.objects.filter(user_id=user_id).all()
+        response = getUserDonations(
             query, many=True, read_only=True).data,
     except:
         if Projects.DoesNotExist:
