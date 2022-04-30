@@ -20,11 +20,13 @@ class getCategories(serializers.ModelSerializer):
 class getTags(serializers.ModelSerializer):
     class Meta:
         model = Tags
+
         fields = "__all__"
         # fields = [
         #     "id",
         #     "name"
         # ]
+
 #=======================================================================================#
 #			                            0                                     	#
 #=======================================================================================#
