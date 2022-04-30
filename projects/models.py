@@ -6,16 +6,31 @@ from user.models import User
 #=======================================================================================#
 #			                            Categone                                    	#
 #=======================================================================================#
+
+
 class Categories(models.Model):
     name = models.CharField(max_length=250)
 
     def __str__(self):
         return self.name
 
+#=======================================================================================#
+#			                              Tags                                         	#
+#=======================================================================================#
+
+
+class Tags(models.Model):
+    name = models.CharField(max_length=250, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 #=======================================================================================#
 #			                            Project                                     	#
 #=======================================================================================#
+
+
 class Projects(models.Model):
     title = models.CharField(max_length=250, unique=True)
     details = models.TextField(blank=True)
@@ -28,6 +43,7 @@ class Projects(models.Model):
     selected_at_by_admin = models.DateTimeField(null=True)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    tag = models.ManyToManyField(Tags)
 
     def __str__(self):
         return self.title
@@ -35,6 +51,8 @@ class Projects(models.Model):
 #=======================================================================================#
 #			                            Pictures                                     	#
 #=======================================================================================#
+
+
 class Pictures(models.Model):
     image = models.ImageField(max_length=255, upload_to="img/%y", null=True)
     project = models.ForeignKey(Projects, on_delete=models.CASCADE)
@@ -45,6 +63,8 @@ class Pictures(models.Model):
 #=======================================================================================#
 #			                            comments                                     	#
 #=======================================================================================#
+
+
 class Comments(models.Model):
     comment = models.TextField(blank=True)
     project = models.ForeignKey(Projects, on_delete=models.CASCADE)
@@ -56,6 +76,8 @@ class Comments(models.Model):
 #=======================================================================================#
 #			                            Replies                                     	#
 #=======================================================================================#
+
+
 class Replies(models.Model):
     replie = models.TextField(blank=True)
     comment = models.ForeignKey(Comments, on_delete=models.CASCADE)
@@ -67,18 +89,23 @@ class Replies(models.Model):
 #=======================================================================================#
 #			                            Reports                                     	#
 #=======================================================================================#
+
+
 class Reports(models.Model):
     reason = models.TextField(blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Projects, on_delete=models.CASCADE, null=True)
     comment = models.ForeignKey(Comments, on_delete=models.CASCADE, null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
-    
+    replie = models.ForeignKey(Replies, on_delete=models.CASCADE, null=True)
+
     def __str__(self):
         return (f"{self.project} {self.comment} by {self.user}")
 
 #=======================================================================================#
 #			                            Donations                                     	#
 #=======================================================================================#
+
+
 class Donations(models.Model):
     paid_up = models.TextField(blank=True)
     project = models.ForeignKey(Projects, on_delete=models.CASCADE)
@@ -86,23 +113,3 @@ class Donations(models.Model):
 
     def __str__(self):
         return (f"{self.user} Donate to {self.project}")
-    
-#=======================================================================================#
-#			                              Tags                                         	#
-#=======================================================================================#
-class Tags(models.Model):
-    name = models.CharField(max_length=250, unique=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-    
-#=======================================================================================#
-#			                        project has tags                                   	#
-#=======================================================================================#
-class project_has_tags(models.Model):
-    project = models.ForeignKey(Projects, on_delete=models.CASCADE)
-    tag = models.ForeignKey(Tags, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return (f"{self.project} has {self.project}")
