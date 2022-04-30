@@ -10,9 +10,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta():
         model = User
         fields = ('first_name', 'last_name', 'email','password','mobile_phone','profile_image','confirm_password')
-        extra_kwargs = {
-            "confirm_password": { "required": False }
-        }
+        
         # which data will be sent 
     def create(self, validated_data):
         # print(validated_data['confirm_password']==validated_data['confirm_password'])
@@ -23,6 +21,4 @@ class RegisterSerializer(serializers.ModelSerializer):
             password = make_password(validated_data['password']),
             mobile_phone = validated_data['mobile_phone'],
             profile_image = validated_data['profile_image'],
-           
-            
             )
