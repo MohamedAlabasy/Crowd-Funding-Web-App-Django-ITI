@@ -40,3 +40,15 @@ class CommentReply(serializers.ModelSerializer):
     class Meta:
         model = Replies
         fields = "__all__"
+
+
+class ReportProject(serializers.ModelSerializer):
+    class Meta:
+        model = Reports
+        fields = "__all__"
+
+
+class RateProjects(serializers.ModelSerializer):
+    class Meta:
+        model = Projects
+        fields = ['rate']

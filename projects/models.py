@@ -113,7 +113,7 @@ class Reports(models.Model):
 
 
 class Donations(models.Model):
-    paid_up = models.TextField()
+    paid_up = models.IntegerField(default=0)
     project = models.ForeignKey(Projects, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
