@@ -7,10 +7,11 @@ class User(models.Model):
     password = models.CharField(max_length=150, blank=False)
     mobile_phone = models.CharField( max_length=150, blank=False)
     email = models.EmailField( blank=False,unique=True)
-    profile_image = models.ImageField (max_length=255, upload_to="img/%y",null=True)
+    profile_image = models.ImageField (max_length=255, upload_to="img/%y",blank=True)
+    country = models.CharField(max_length=30,blank=True)
     Birth_date=models.DateField(null=True)
     facebook_profile=models.URLField(max_length = 200,null=True)
-    email_verified=models.BooleanField(null=True)
+    is_verifications=models.BooleanField(null=True)
     @property
     def token(self):
         return '' 
