@@ -40,7 +40,7 @@ class Projects(models.Model):
     start_campaign = models.DateTimeField(default=timezone.now)
     end_campaign = models.DateTimeField()
     created_at = models.DateTimeField(default=timezone.now)
-    selected_at_by_admin = models.DateTimeField(blank=True)
+    selected_at_by_admin = models.DateTimeField(blank=True, null=True)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     tag = models.ManyToManyField(Tags)
