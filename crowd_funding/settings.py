@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',  # for create api end point
-    'users',
+
     'projects',
     'user.apps.UserConfig',
 
@@ -82,17 +82,13 @@ WSGI_APPLICATION = 'crowd_funding.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'crowd_funding',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
-    #  'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'crowd_funding',
-    #     'USER': 'root',
-    #     'PASSWORD': '',
-    #     'HOST': '127.0.0.1',
-    #     'PORT': '3306',
-    # }
 }
 
 
@@ -132,7 +128,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR,"media/")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 
 # Default primary key field type
