@@ -41,3 +41,15 @@ class Pictures(models.Model):
 
     def __str__(self):
         return self.image
+
+#=======================================================================================#
+#			                            comments                                     	#
+#=======================================================================================#
+
+
+class Comments(models.Model):
+    comment = models.TextField(blank=True)
+    project = models.ForeignKey(Projects, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.comment
