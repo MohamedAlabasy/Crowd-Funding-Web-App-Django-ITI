@@ -116,12 +116,13 @@ class updateProfile(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'first_name',
-            'last_name',
-            'password',
-            'mobile_phone',
-            'profile_image',
-            'Birth_date',
-            'facebook_profile',
-            'country'
+            "first_name",
+            "last_name",
+            "password",
+            "mobile_phone",
+            "profile_image",
+            "country",
+            "Birth_date",
+            "facebook_profile",
+            "is_verifications",
         ]
