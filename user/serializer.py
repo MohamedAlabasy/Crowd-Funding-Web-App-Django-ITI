@@ -15,13 +15,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ('first_name', 'last_name', 'email', 'password',
                   'mobile_phone', 'profile_image', 'confirm_password')
-        extra_kwargs = {
-            "confirm_password": {"required": False}
-        }
+
         # which data will be sent
 
     def create(self, validated_data):
-        # print(validated_data['confirm_password']==validated_data['confirm_password'])
         return User.objects.create(
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
@@ -35,18 +32,18 @@ class RegisterSerializer(serializers.ModelSerializer):
 class getUserProfile(serializers.ModelSerializer):
     class Meta:
         model = User
-        # fields = "__all__"
-        fields = [
-            'id',
-            'first_name',
-            'last_name',
-            'password',
-            'mobile_phone',
-            'profile_image',
-            'Birth_date',
-            'facebook_profile',
-            # 'country'
-        ]
+        fields = "__all__"
+        # fields = [
+        #     'id',
+        #     'first_name',
+        #     'last_name',
+        #     'password',
+        #     'mobile_phone',
+        #     'profile_image',
+        #     'Birth_date',
+        #     'facebook_profile',
+        #     'country'
+        # ]
 
 
 class getUserProjects(serializers.ModelSerializer):
@@ -56,6 +53,7 @@ class getUserProjects(serializers.ModelSerializer):
 
     class Meta:
         model = Projects
+
         fields = [
             'id',
             'title',

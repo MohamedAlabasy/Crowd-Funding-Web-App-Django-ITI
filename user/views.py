@@ -38,7 +38,7 @@ def view_user_profile(request, user_id):
         if User.DoesNotExist:
             response = ([
                 {
-                    "message": f"There is no user with this id {user_id}",
+                    "message": f"There is no user with this id = {user_id}",
                 }
             ])
         else:
