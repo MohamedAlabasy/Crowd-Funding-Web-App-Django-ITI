@@ -15,8 +15,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ('first_name', 'last_name', 'email',
                   'mobile_phone', 'profile_image', 'password', 'confirm_password')
-     
-        # which data will be sent
 
     def create(self, validated_data):
         return User.objects.create(
@@ -46,7 +44,7 @@ class LoginSerializer(serializers.ModelSerializer):
 class getUserProfile(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = "__all__"
+        fields = '__all__'
         # fields = [
         #     'id',
         #     'first_name',
@@ -116,3 +114,23 @@ class getUserDonations(serializers.ModelSerializer):
         #     'owner',
         #     'tag',
         # ]
+
+#=======================================================================================#
+#			                               update                                   	#
+#=======================================================================================#
+
+
+class updateProfile(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "first_name",
+            "last_name",
+            "password",
+            "mobile_phone",
+            "profile_image",
+            "country",
+            "Birth_date",
+            "facebook_profile",
+            "is_verifications",
+        ]

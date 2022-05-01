@@ -57,7 +57,7 @@ class LoginApiView(GenericAPIView):
 def user_profile(request, user_id):
     try:
         query = User.objects.get(id=user_id)
-        response = getUserDonations()(query, read_only=True).data,
+        response = getUserProfile(query, read_only=True).data,
     except:
         if User.DoesNotExist:
             response = ([
@@ -111,7 +111,7 @@ def user_donations(request, user_id):
     try:
         query = Donations.objects.filter(user_id=user_id).all()
         response = getUserDonations(
-            query, many=True, read_only=True).data,
+            instance=query, many=True, read_only=True).data,
     except:
         if Projects.DoesNotExist:
             response = ([
@@ -127,3 +127,36 @@ def user_donations(request, user_id):
             ])
 
     return Response(response)
+
+#=======================================================================================#
+#                                  update_user user Data                                #
+#=======================================================================================#
+
+
+@api_view(['POST'])
+def update_user(request, user_id):
+    query = User.objects.get(id=user_id)
+    serializer = updateProfile(instance=query, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+
+
+#=======================================================================================#
+#			                            getUserDonations                               	#
+#=======================================================================================#
+
+@api_view(['DELETE'])
+def delete_user(request, user_id):
+    # try:
+    User.objects.get(id=user_id).delete()
+    serializer = ([
+        {
+            "message": "deleted successfly",
+        }
+    ])
+    return Response(serializer, status=status.HTTP_202_ACCEPTED)
+    # except:
+
+    # return Response(serializer, status=status.HTTP_202_ACCEPTED)

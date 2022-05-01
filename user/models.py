@@ -4,9 +4,11 @@ import jwt
 from datetime import datetime, timedelta
 from django.conf import settings
 # Create your models here.
+
+
 class User(models.Model):
-    ##main Data
-    first_name = models.CharField( max_length=150, blank=False)
+    # main Data
+    first_name = models.CharField(max_length=150, blank=False)
     last_name = models.CharField(max_length=150, blank=False)
     password = models.CharField(max_length=150, blank=False)
     mobile_phone = models.CharField( max_length=150, blank=False)
@@ -26,4 +28,3 @@ class User(models.Model):
         'exp':datetime.utcnow()+timedelta(hours=24)},
         settings.SECRET_KEY,algorithm='HS256')
         return token
-
