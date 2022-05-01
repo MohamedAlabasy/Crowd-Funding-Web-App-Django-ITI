@@ -179,3 +179,26 @@ def show_similar_project(request, project_id):
             }
         ])
     return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+def get_single_project(request, project_id):
+    try:
+        query = Projects.objects.get(id=project_id)
+        serializer = getProjects(query).data
+        serializer = ({
+            "status": 1,
+            "project": serializer,
+            
+        })
+        return Response(serializer, status=status.HTTP_200_OK)
+    except:
+
+        serializer = ([
+            {
+                "status": 0,
+                "message": f"There is no tags with this id = {project_id}",
+            }
+        ])
+    return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
