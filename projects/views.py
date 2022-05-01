@@ -1,8 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
-from .serializers import createProjects, createComment, CommentReply, ReportProject, RateProjects, getProjects
-from .models import Projects
+from .serializers import createProjects, getCategories, createComment, CommentReply, ReportProject, RateProjects, getProjects
+from .models import Projects, Categories
 
 
 @api_view(['POST'])
@@ -121,3 +121,27 @@ def cancel_project(request, project_id):
             "message": "You can't cancel this project because current donation more than 25%"
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def all_categories(request):
+    try:
+        query = Categories.objects.all()
+        serializer = getCategories(query, many=True, read_only=True).data
+        if len(serializer) > 0:
+            serializer = (
+                {
+                    "status": 1,
+                    "count": len(serializer),
+                    "data": serializer
+                })
+        else:
+            raise serializers.ValidationError("no data to show")
+    except:
+        if Projects.DoesNotExist:
+            serializer = (
+                {
+                    "status": 0,
+                    "message": f"There is no user with this id = {user_id}",
+                })
+    return Response(serializer)
