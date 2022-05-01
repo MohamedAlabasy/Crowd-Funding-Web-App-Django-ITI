@@ -23,6 +23,14 @@ class getProjects(serializers.ModelSerializer):
         model = Projects
         fields = "__all__"
 
+class getSingleProject(serializers.ModelSerializer):
+    category = getCategories(read_only=True)
+    tag = getTags(many=True, read_only=True)
+
+    class Meta:
+        model = Projects
+        fields = "__all__"
+
 
 class createProjects(serializers.ModelSerializer):
     class Meta:
