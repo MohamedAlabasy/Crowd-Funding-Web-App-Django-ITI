@@ -17,11 +17,11 @@ def create_project(request):
         })
         return Response(serializer, status=status.HTTP_201_CREATED)
     else:
-        # serializer = ({
-        #     "status": 0,
-        #     "error": serializer.errors,
-        # })
-        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+        serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+        })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 #=======================================================================================#
 #			                            Replies                                     	#
 #=======================================================================================#
@@ -39,7 +39,11 @@ def create_comment(request):
         })
         return Response(serializer, status=status.HTTP_201_CREATED)
     else:
-        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+        serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+        })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['POST'])
@@ -54,7 +58,11 @@ def reply_comment(request):
         })
         return Response(serializer, status=status.HTTP_201_CREATED)
     else:
-        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+        serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+        })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['POST'])
@@ -69,7 +77,11 @@ def report_project(request):
         })
         return Response(serializer, status=status.HTTP_201_CREATED)
     else:
-        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+        serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+        })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['POST'])
@@ -85,7 +97,11 @@ def rate_project(request, project_id):
         })
         return Response(serializer, status=status.HTTP_201_CREATED)
     else:
-        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+        serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+        })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['DELETE'])
@@ -100,5 +116,8 @@ def cancel_project(request, project_id):
         })
         return Response(serializer, status=status.HTTP_201_CREATED)
     else:
-        raise serializers.ValidationError(
-            "You can't cancel this project because current donation more than 25%")
+        serializer = ({
+            "status": 0,
+            "message": "You can't cancel this project because current donation more than 25%"
+        })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
