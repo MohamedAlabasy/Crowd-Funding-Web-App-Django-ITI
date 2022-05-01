@@ -162,13 +162,16 @@ def show_similar_project(request, project_id):
     try:
         query = Projects.objects.get(id=project_id)
         serializer = getSingleProject(query).data
-        #query2 = Projects.objects.get(tag=serializer['tag'])
-        #serializer2 = getSingleProject(query2).data
-        print(serializer['tag'][0])
+
+        query_similar_project = Projects.objects.filter(
+            tag=serializer['tag'][0]).all()[:4]
+        serializer_similar_project = getSingleProject(
+            query_similar_project, many=True).data
         serializer = ({
             "status": 1,
+            "similar_project_count": len(serializer_similar_project),
             "project": serializer,
-            # 'similar project':serializer2,
+            'similar_project': serializer_similar_project,
         })
         return Response(serializer, status=status.HTTP_200_OK)
     except:

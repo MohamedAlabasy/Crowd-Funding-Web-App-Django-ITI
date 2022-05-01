@@ -32,6 +32,8 @@ class getProjects(serializers.ModelSerializer):
 
 
 class getSingleProject(serializers.ModelSerializer):
+    category = getCategories(read_only=True)
+    owner = getUserProfile(read_only=True)
 
     class Meta:
         model = Projects
