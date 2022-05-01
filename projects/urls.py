@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import get_single_project,show_similar_project, create_project, create_comment, reply_comment, report_project, rate_project, cancel_project, all_categories
+
 #=======================================================================================#
 #			                                URLS                                     	#
 #=======================================================================================#
