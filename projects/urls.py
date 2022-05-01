@@ -13,5 +13,6 @@ urlpatterns = [
     path('cancel/<int:project_id>', cancel_project),
     path('show/<int:project_id>', show_similar_project),
     path('single/<int:project_id>', get_single_project),
+    
     path('categories', all_categories),
 ]
