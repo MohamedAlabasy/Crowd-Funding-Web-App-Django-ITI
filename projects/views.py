@@ -1,7 +1,8 @@
 from rest_framework.response import Response
+
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
-from .serializers import createProjects, createComment, CommentReply, ReportProject, RateProjects, getProjects
+from .serializers import createProjects,getSingleProject, createComment, CommentReply, ReportProject, RateProjects, getProjects
 from .models import Projects
 
 
@@ -102,3 +103,28 @@ def cancel_project(request, project_id):
     else:
         raise serializers.ValidationError(
             "You can't cancel this project because current donation more than 25%")
+
+
+@api_view(['GET'])
+def show_similar_project(request, project_id):
+    try:
+        query = Projects.objects.get(id=project_id)
+        serializer = getSingleProject(query).data
+        #query2 = Projects.objects.get(tag=serializer['tag'])
+        #serializer2 = getSingleProject(query2).data
+        print(serializer['tag'][0])
+        serializer = ({
+            "status": 1,
+            "project": serializer,
+            #'similar project':serializer2,
+        })
+        return Response(serializer, status=status.HTTP_200_OK)
+    except:
+
+        serializer = ([
+            {
+                "status": 0,
+                "message": f"There is no tags with this id = {project_id}",
+            }
+        ])
+    return Response(serializer, status=status.HTTP_404_NOT_FOUND)
