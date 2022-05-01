@@ -11,4 +11,5 @@ urlpatterns = [
     path('report/add', report_project),
     path('rate/<int:project_id>', rate_project),
     path('cancel/<int:project_id>', cancel_project),
+    path('categories',),
 ]
