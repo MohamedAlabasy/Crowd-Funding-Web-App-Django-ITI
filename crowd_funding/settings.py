@@ -40,13 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',  # for create api end point
-
-    'user.apps.UserConfig',
+    'rest_framework.authtoken',
     'projects',
-
+    'user.apps.UserConfig',
     "corsheaders",
-
 ]
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
