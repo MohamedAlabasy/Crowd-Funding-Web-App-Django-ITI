@@ -23,6 +23,11 @@ class getProjects(serializers.ModelSerializer):
         model = Projects
         fields = "__all__"
 
+class getSingleProject(serializers.ModelSerializer):
+    class Meta:
+        model = Projects
+        fields = "__all__"       
+
 
 class createProjects(serializers.ModelSerializer):
     class Meta:
