@@ -2,8 +2,8 @@ from rest_framework.response import Response
 
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
-from .serializers import createProjects,getSingleProject, createComment, CommentReply, ReportProject, RateProjects, getProjects
-from .models import Projects,Categories
+from .serializers import createProjects, getSingleProject, createComment, CommentReply, ReportProject, RateProjects, getProjects
+from .models import Projects, Categories
 
 
 @api_view(['POST'])
@@ -156,6 +156,7 @@ def all_categories(request):
                 })
     return Response(serializer)
 
+
 @api_view(['GET'])
 def show_similar_project(request, project_id):
     try:
@@ -167,7 +168,7 @@ def show_similar_project(request, project_id):
         serializer = ({
             "status": 1,
             "project": serializer,
-            #'similar project':serializer2,
+            # 'similar project':serializer2,
         })
         return Response(serializer, status=status.HTTP_200_OK)
     except:
@@ -180,15 +181,16 @@ def show_similar_project(request, project_id):
         ])
     return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(['GET'])
-def get_single_project(request, project_id):
+def show_project(request, project_id):
     try:
         query = Projects.objects.get(id=project_id)
         serializer = getProjects(query).data
         serializer = ({
             "status": 1,
-            "project": serializer,
-            
+            "data": serializer,
+
         })
         return Response(serializer, status=status.HTTP_200_OK)
     except:
@@ -200,5 +202,3 @@ def get_single_project(request, project_id):
             }
         ])
     return Response(serializer, status=status.HTTP_404_NOT_FOUND)
-
-
