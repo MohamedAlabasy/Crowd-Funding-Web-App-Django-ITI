@@ -106,21 +106,30 @@ def rate_project(request, project_id):
 
 @api_view(['DELETE'])
 def cancel_project(request, project_id):
-    query = Projects.objects.get(id=project_id)
-    serializer = getProjects(query).data
-    if (serializer['current_donation'] / serializer['total_target'] < 0.25):
-        query.delete()
-        serializer = ({
-            "status": 1,
-            "message": "Cancel successfully",
-        })
-        return Response(serializer, status=status.HTTP_201_CREATED)
-    else:
-        serializer = ({
-            "status": 0,
-            "message": "You can't cancel this project because current donation more than 25%"
-        })
-        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+    try:
+        query = Projects.objects.get(id=project_id)
+        serializer = getProjects(query).data
+        if (serializer['current_donation'] / serializer['total_target'] < 0.25):
+            query.delete()
+            serializer = ({
+                "status": 1,
+                "message": "Cancel successfully",
+            })
+            return Response(serializer, status=status.HTTP_201_CREATED)
+        else:
+            serializer = ({
+                "status": 1,
+                "message": "You can't cancel this project because current donation more than 25%"
+            })
+            return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+    except:
+        if Projects.DoesNotExist:
+            serializer = (
+                {
+                    "status": 0,
+                    "message": f"There is no project with this id = {project_id}",
+                })
+            return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
