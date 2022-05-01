@@ -16,8 +16,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ('first_name', 'last_name', 'email',
                   'mobile_phone', 'profile_image', 'password', 'confirm_password')
 
-        # which data will be sent
-
     def create(self, validated_data):
         return User.objects.create(
             first_name=validated_data['first_name'],
@@ -27,6 +25,16 @@ class RegisterSerializer(serializers.ModelSerializer):
             mobile_phone=validated_data['mobile_phone'],
             profile_image=validated_data['profile_image'],
         )
+
+
+class LoginSerializer(serializers.ModelSerializer):
+     password = serializers.CharField(
+        max_length=128, min_length=8, write_only=True)
+     class Meta():
+        model = User
+        fields = ('email', 'password', 'token')
+        read_only_fields=['token']
+
 
 #=======================================================================================#
 #			                            getUserProfile                                 	#
