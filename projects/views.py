@@ -205,3 +205,34 @@ def show_project(request, project_id):
             }
         ])
     return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def show_latest_projects(request):
+    try:
+        # query = Projects.objects.all()
+        # serializer = getProjects(query).data
+
+        query2 = Projects.objects.order_by('create_at').last()
+        serializer_created_at = getLatestProjects(
+            query2, many=True).data
+
+        serializer = ({
+            "status": 1,
+            "project": serializer,
+            'latest_project': serializer_created_at,
+
+        })
+        return Response(serializer, status=status.HTTP_200_OK)
+    except:
+
+        serializer = ([
+            {
+                "status": 0,
+                "message": f"There is no projects with this date ",
+            }
+        ])
+    return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+    
+
