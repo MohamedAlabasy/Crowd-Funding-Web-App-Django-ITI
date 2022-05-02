@@ -69,13 +69,14 @@ class verifyEmail(generics.GenericAPIView):
         pass
 class LoginApiView(GenericAPIView):
     serializer_class = LoginSerializer
-    def post(self,request):
-        email = request.data.get('email',None)
-        confirm_password = request.data.get('password',None)
+
+    def post(self, request):
+        email = request.data.get('email', None)
+        confirm_password = request.data.get('password', None)
         try:
-            password =User.objects.values_list('password').get(email=email)
-            str_password=''.join(password)
-            if check_password(confirm_password,str_password):
+            password = User.objects.values_list('password').get(email=email)
+            str_password = ''.join(password)
+            if check_password(confirm_password, str_password):
                 try:
                     user = User.objects.get(email=email)
                 except User.DoesNotExist:
@@ -86,13 +87,13 @@ class LoginApiView(GenericAPIView):
 
         except:
             password = None
-        
-        
-        return response.Response({'message':"invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-            
+
+        return response.Response({'message': "invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
 #=======================================================================================#
 #			                          view user profile                                	#
 #=======================================================================================#
+
 
 @api_view(['GET'])
 def user_profile(request, user_id):
