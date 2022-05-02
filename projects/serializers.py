@@ -15,25 +15,22 @@ class getTags(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class getUserProfile(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'
-
-
 class getProjects(serializers.ModelSerializer):
     category = getCategories(read_only=True)
     tag = getTags(many=True, read_only=True)
-    owner = getUserProfile(read_only=True)
 
     class Meta:
         model = Projects
         fields = "__all__"
-
+    
+class getLatestProjects(serializers.ModelSerializer):
+    class Meta:
+        model = Projects
+        fields = ['created_at']
 
 class getSingleProject(serializers.ModelSerializer):
     category = getCategories(read_only=True)
-    owner = getUserProfile(read_only=True)
+    tag = getTags(many=True, read_only=True)
 
     class Meta:
         model = Projects
