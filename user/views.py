@@ -1,7 +1,7 @@
 from ntpath import realpath
 from rest_framework.generics import GenericAPIView
 from rest_framework import response, status, generics
-from .serializer import LoginSerializer, RegisterSerializer, getUserProfile, getUserProjects, getUserDonations
+from .serializer import LoginSerializer, updateProfile, RegisterSerializer, getUserProfile, getUserProjects, getUserDonations
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
@@ -27,23 +27,23 @@ class RegisterApiView(GenericAPIView):
             if serializer.validated_data['confirm_password'] == serializer.validated_data['password']:
 
                 serializer.save()
-                user_data=serializer.data
-                user=User.objects.get(email=user_data['email'])
-                token=RefreshToken.for_user(user).access_token
+                user_data = serializer.data
+                user = User.objects.get(email=user_data['email'])
+                token = RefreshToken.for_user(user).access_token
                 current_site = get_current_site(request).domain
                 relativeLink = reverse('email-verify')
-                absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
+                absurl = 'http://'+current_site + \
+                    relativeLink+"?token="+str(token)
                 email_body = 'Hi '+user.first_name + \
-                ' Use the link below to verify your email \n' + absurl
+                    ' Use the link below to verify your email \n' + absurl
                 data = {'email_body': email_body, 'to_email': user.email,
-                    'email_subject': 'Verify your email'}
+                        'email_subject': 'Verify your email'}
 
                 Util.send_email(data)
                 return response.Response(serializer.data, status=status.HTTP_201_CREATED)
             return response.Response({"password_error": "password must match"}, status=status.HTTP_400_BAD_REQUEST)
 
         return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class verifyEmail(generics.GenericAPIView):
@@ -83,18 +83,19 @@ class LoginApiView(GenericAPIView):
 def user_profile(request, user_id):
     try:
         query = User.objects.get(id=user_id)
-        serializer = getUserProfile(query, read_only=True).data
+        serializer = getUserProfile(instance=query, read_only=True)
         serializer = ({
             "status": 1,
-            "data": serializer
+            "data": serializer.data
         })
+        return Response(serializer, status=status.HTTP_200_OK)
     except:
         if User.DoesNotExist:
             serializer = ({
                 "status": 0,
                 "message": f"There is no user with this id = {user_id}",
             })
-    return Response(serializer)
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 #=======================================================================================#
 #                                   view user projects                                  #
@@ -158,13 +159,23 @@ def user_donations(request, user_id):
 
 
 @api_view(['POST'])
-def update_user(request, user_id):
-    query = User.objects.get(id=user_id)
+def update_user(request):
+    query = User.objects.get(id=request.data['id'])
     serializer = updateProfile(instance=query, data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+        serializer = ({
+            "status": 1,
+            "message": "update Profile successfully",
+            "date": serializer.data
+        })
+        return Response(serializer, status=status.HTTP_201_CREATED)
+    else:
+        serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+        })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
 #=======================================================================================#
