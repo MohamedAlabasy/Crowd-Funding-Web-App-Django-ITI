@@ -32,9 +32,6 @@ winpty python manage.py runserver
 `Step 4` :  
 &nbsp; &nbsp; &nbsp; &nbsp; Create database call `crowd_funding` then ...
 ```
-python manage.py makemigrations
-```
-```
 python manage.py migrate
 ```
 `Step 5` :  To Create Admin Account : 
