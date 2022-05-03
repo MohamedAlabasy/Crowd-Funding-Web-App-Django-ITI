@@ -6,6 +6,7 @@ from .views import user_profile, user_projects, user_donations, delete_user, upd
 urlpatterns = [
     path('register', views.RegisterApiView.as_view(), name="register"),
     path('login', views.LoginApiView .as_view(), name="login"),
+    # path('auth', views.AuthUserAPIview.as_view(), name="auth"),
     path('email-verify', verifyEmail.as_view(), name="email-verify"),
 
 
