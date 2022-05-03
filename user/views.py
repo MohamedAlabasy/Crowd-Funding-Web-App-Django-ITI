@@ -1,7 +1,7 @@
 from ntpath import realpath
 from rest_framework.generics import GenericAPIView
-from rest_framework import response, status,generics
-from .serializer import  LoginSerializer, RegisterSerializer, getUserProfile, getUserProjects, getUserDonations
+from rest_framework import response, status, generics
+from .serializer import LoginSerializer, RegisterSerializer, getUserProfile, getUserProjects, getUserDonations
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
@@ -15,6 +15,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 
 # Create your views here.
+
+
 class RegisterApiView(GenericAPIView):
     # serializer_class = RegisterSerializer
 
@@ -67,6 +69,8 @@ class RegisterApiView(GenericAPIView):
 class verifyEmail(generics.GenericAPIView):
     def get(self):
         pass
+
+
 class LoginApiView(GenericAPIView):
     serializer_class = LoginSerializer
 
@@ -164,7 +168,7 @@ def user_donations(request, user_id):
             serializer = (
                 {
                     "status": 0,
-                    "message": f"There is no user with this id = {user_id}",
+                    "message": f"There is no donations with this user id = {user_id}",
                 })
     return Response(serializer)
 
