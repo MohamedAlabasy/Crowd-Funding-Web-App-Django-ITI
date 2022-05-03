@@ -1,12 +1,16 @@
 from rest_framework.response import Response
-
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes,authentication_classes
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
+from user import jwt
 from .serializers import updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
 from .models import Projects, Categories, Tags, Rates
 
 
 @api_view(['POST'])
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def create_project(request):
     serializer = createProjects(data=request.data)
     if serializer.is_valid():
@@ -26,6 +30,8 @@ def create_project(request):
 
 
 @api_view(['POST'])
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def create_comment(request):
     serializer = createComment(data=request.data)
     if serializer.is_valid():
@@ -45,6 +51,8 @@ def create_comment(request):
 
 
 @api_view(['POST'])
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def reply_comment(request):
     serializer = CommentReply(data=request.data)
     if serializer.is_valid():
@@ -64,6 +72,8 @@ def reply_comment(request):
 
 
 @api_view(['POST'])
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def report_project(request):
     serializer = ReportProject(data=request.data)
     if serializer.is_valid():
@@ -82,7 +92,31 @@ def report_project(request):
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
+@api_view(['POST'])
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def rate_project(request, project_id):
+    query = Projects.objects.get(id=project_id)
+    serializer = RateProjects(instance=query, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        serializer = ({
+            "status": 1,
+            "message": "Project created successfully",
+            "date": serializer.data
+        })
+        return Response(serializer, status=status.HTTP_201_CREATED)
+    else:
+        serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+        })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
 @api_view(['DELETE'])
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def cancel_project(request, project_id):
     try:
         query = Projects.objects.get(id=project_id)
@@ -111,6 +145,8 @@ def cancel_project(request, project_id):
 
 
 @api_view(['GET'])
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def all_categories(request):
     try:
         query = Categories.objects.all()
@@ -135,6 +171,8 @@ def all_categories(request):
 
 
 @api_view(['GET'])
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def get_all_tags(request):
     try:
         query = Tags.objects.all()
@@ -159,6 +197,8 @@ def get_all_tags(request):
 
 
 @api_view(['GET'])
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def show_similar_project(request, project_id):
     try:
         query = Projects.objects.get(id=project_id)
@@ -207,6 +247,8 @@ def show_project(request, project_id):
 
 
 @api_view(['GET'])
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def get_latest_projects(request):
     try:
         query = Projects.objects.all().order_by('created_at').reverse()[:5]
