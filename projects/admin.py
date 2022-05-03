@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Categories, Tags, Projects, Pictures, Comments, Replies, Reports, Donations
+from .models import Categories, Tags, Projects, Pictures, Comments, Replies, Reports, Donations, Rates
 
 #=======================================================================================#
 #			                           Register models                                  #
@@ -12,3 +12,4 @@ admin.site.register(Comments)
 admin.site.register(Replies)
 admin.site.register(Reports)
 admin.site.register(Donations)
+admin.site.register(Rates)
