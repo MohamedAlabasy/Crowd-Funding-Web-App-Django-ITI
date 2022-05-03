@@ -2,7 +2,7 @@ from rest_framework.response import Response
 
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
-from .serializers import createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, RateProjects, getProjects
+from .serializers import updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, RateProjects, getProjects
 from .models import Projects, Categories, Tags
 
 
@@ -23,9 +23,6 @@ def create_project(request):
             "errors": serializer.errors
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
-#=======================================================================================#
-#			                            Replies                                     	#
-#=======================================================================================#
 
 
 @api_view(['POST'])
@@ -158,7 +155,7 @@ def all_categories(request):
 
 
 @api_view(['GET'])
-def all_tags(request):
+def get_all_tags(request):
     try:
         query = Tags.objects.all()
         serializer = getTags(query, many=True, read_only=True).data
@@ -221,12 +218,11 @@ def show_project(request, project_id):
         return Response(serializer, status=status.HTTP_200_OK)
     except:
 
-        serializer = ([
+        serializer = (
             {
                 "status": 0,
                 "message": f"There is no tags with this id = {project_id}",
-            }
-        ])
+            })
     return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
@@ -250,3 +246,64 @@ def get_latest_projects(request):
                 "message": "There is no projects to show",
             })
     return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
+def update_donate_project(project_id, paid_up):
+    # try:
+    query = Projects.objects.get(id=project_id)
+    # except:
+    # serializer = (
+    #         {
+    #             "status": 0,
+    #             "message": f"There is no project with this id = {project_id}"
+    #         })
+    #     return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+    data = {
+        "current_donation": paid_up
+    }
+    print(project_id, paid_up)
+    serializer = updateDonateProjects(instance=query, data=data)
+    print(serializer.is_valid())
+    if serializer.is_valid():
+        serializer.save()
+        print(serializer.data)
+        serializer = ({
+            "status": 1,
+            "errors": "serializer.errors"
+        })
+        return Response(serializer)
+
+    else:
+        serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+        })
+        return Response(serializer)
+
+
+@api_view(['POST'])
+def donate_project(request, project_id):
+    request.data['project'] = project_id
+    serializer = DonateToProject(data=request.data)
+    if serializer.is_valid():
+        if request.data['paid_up'] == 0 or not request.data['paid_up']:
+            serializer = ({
+                "status": 0,
+                "message": "You must enter any donate"
+            })
+            return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+        else:
+            update_donate_project(project_id, request.data['paid_up'])
+            serializer.save()
+            serializer = ({
+                "status": 1,
+                "message": "Donate successfully",
+                "date": serializer.data
+            })
+            return Response(serializer, status=status.HTTP_201_CREATED)
+    else:
+        serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+        })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)

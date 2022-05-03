@@ -33,10 +33,10 @@ class Tags(models.Model):
 
 class Projects(models.Model):
     title = models.CharField(max_length=250, unique=True)
-    details = models.TextField(blank=True)
-    rate = models.IntegerField(default=0)
+    details = models.TextField()
+    rate = models.IntegerField()
     total_target = models.IntegerField()
-    current_donation = models.IntegerField(default=0)
+    current_donation = models.IntegerField()
     start_campaign = models.DateTimeField(default=timezone.now)
     end_campaign = models.DateTimeField()
     created_at = models.DateTimeField(default=timezone.now)
@@ -113,7 +113,7 @@ class Reports(models.Model):
 
 
 class Donations(models.Model):
-    paid_up = models.IntegerField(default=0)
+    paid_up = models.IntegerField()
     project = models.ForeignKey(Projects, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
