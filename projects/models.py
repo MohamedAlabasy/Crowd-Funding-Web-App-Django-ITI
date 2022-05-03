@@ -119,3 +119,16 @@ class Donations(models.Model):
 
     def __str__(self):
         return (f"{self.user} Donate to {self.project}")
+
+#=======================================================================================#
+#			                            Rates                                        	#
+#=======================================================================================#
+
+
+class Rates(models.Model):
+    rate = models.IntegerField()
+    project = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return (f"{self.user} rate to {self.project}")
