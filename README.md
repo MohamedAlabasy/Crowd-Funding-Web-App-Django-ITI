@@ -32,9 +32,6 @@ winpty python manage.py runserver
 `Step 4` :  
 &nbsp; &nbsp; &nbsp; &nbsp; Create database call `crowd_funding` then ...
 ```
-python manage.py makemigrations
-```
-```
 python manage.py migrate
 ```
 `Step 5` :  To Create Admin Account : 
@@ -45,7 +42,7 @@ python manage.py createsuperuser
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  `To help you understand the project databases, see the following ERF`
 <h3 align="center"> DataBase ERD </h3>
 <p align="center">
-   <img src="https://user-images.githubusercontent.com/93389016/165193538-fd1c8b94-ec66-4e60-b520-b5e1c6cc8648.png" alt="Database ERD">
+   <img src="https://user-images.githubusercontent.com/93389016/166452361-3d7cc5a1-d101-496f-ad43-5d00be81efb4.png" alt="Database ERD">
 </p>
 
 

@@ -58,14 +58,24 @@ class LoginApiView(GenericAPIView):
         confirm_password = request.data.get('password', None)
         try:
             password = User.objects.values_list('password').get(email=email)
+            is_verified = User.objects.values_list('is_verifications').get(email=email)
+            is_verified2 = list(is_verified)
             str_password = ''.join(password)
+
             if check_password(confirm_password, str_password):
                 try:
                     user = User.objects.get(email=email)
                 except User.DoesNotExist:
                     user = None
+                if not is_verified2[0]:
+                    return response.Response({'message': "please verify your email"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+                
                 if user:
                     serializer = self.serializer_class(user)
+                    User.objects.filter(email=email).update(is_authenticated= True)
+
                     return response.Response(serializer.data, status=status.HTTP_200_OK)
 
         except:

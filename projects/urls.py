@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import all_tags, get_latest_projects, show_project, show_similar_project, create_project, create_comment, reply_comment, report_project, rate_project, cancel_project, all_categories
+from .views import get_all_tags, donate_project, get_latest_projects, show_project, show_similar_project, create_project, create_comment, reply_comment, report_project, rate_project, cancel_project, all_categories
 
 #=======================================================================================#
 #			                                URLS                                     	#
@@ -16,5 +16,6 @@ urlpatterns = [
     path('single/<int:project_id>', show_project),
     path('latest', get_latest_projects),
     path('categories', all_categories),
-    path('tags', all_tags),
+    path('tags', get_all_tags),
+    path('donate/<int:project_id>', donate_project),
 ]
