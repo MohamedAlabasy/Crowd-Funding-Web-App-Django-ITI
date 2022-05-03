@@ -16,52 +16,32 @@ from django.urls import reverse
 
 # Create your views here.
 class RegisterApiView(GenericAPIView):
-    # serializer_class = RegisterSerializer
-
-    # def post(self, request):
-    #     serializer = self.serializer_class(data=request.data)
-
-    #     if serializer.is_valid():
-    #         if serializer.validated_data['confirm_password'] == serializer.validated_data['password']:
-
-    #             serializer.save()
-    #             user_data=serializer.data
-    #             user=User.objects.get(email=user_data['email'])
-    #             token=RefreshToken.for_user(user).access_token
-    #             current_site = get_current_site(request).domain
-    #             relativeLink = reverse('email-verify')
-    #             absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
-    #             email_body = 'Hi '+user.first_name + \
-    #             ' Use the link below to verify your email \n' + absurl
-    #             data = {'email_body': email_body, 'to_email': user.email,
-    #                 'email_subject': 'Verify your email'}
-
-    #             Util.send_email(data)
-    #             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
-    #         return response.Response({"password_error": "password must match"}, status=status.HTTP_400_BAD_REQUEST)
-
-    #     return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     serializer_class = RegisterSerializer
-    # renderer_classes = (UserRenderer,)
 
     def post(self, request):
-        user = request.data
-        serializer = self.serializer_class(data=user)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        user_data = serializer.data
-        user = User.objects.get(email=user_data['email'])
-        token = RefreshToken.for_user(user).access_token
-        current_site = get_current_site(request).domain
-        relativeLink = reverse('email-verify')
-        absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
-        email_body = 'Hi '+user.first_name + \
-            ' Use the link below to verify your email \n' + absurl
-        data = {'email_body': email_body, 'to_email': user.email,
-                'email_subject': 'Verify your email'}
+        serializer = self.serializer_class(data=request.data)
 
-        Util.send_email(data)
-        return Response(user_data, status=status.HTTP_201_CREATED)
+        if serializer.is_valid():
+            if serializer.validated_data['confirm_password'] == serializer.validated_data['password']:
+
+                serializer.save()
+                user_data=serializer.data
+                user=User.objects.get(email=user_data['email'])
+                token=RefreshToken.for_user(user).access_token
+                current_site = get_current_site(request).domain
+                relativeLink = reverse('email-verify')
+                absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
+                email_body = 'Hi '+user.first_name + \
+                ' Use the link below to verify your email \n' + absurl
+                data = {'email_body': email_body, 'to_email': user.email,
+                    'email_subject': 'Verify your email'}
+
+                Util.send_email(data)
+                return response.Response(serializer.data, status=status.HTTP_201_CREATED)
+            return response.Response({"password_error": "password must match"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class verifyEmail(generics.GenericAPIView):
