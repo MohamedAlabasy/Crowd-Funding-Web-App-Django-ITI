@@ -9,8 +9,8 @@ from .models import Projects, Categories, Tags, Rates
 
 
 @api_view(['POST'])
-@authentication_classes([jwt.JWTAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([jwt.JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def create_project(request):
     serializer = createProjects(data=request.data)
     if serializer.is_valid():
@@ -30,8 +30,8 @@ def create_project(request):
 
 
 @api_view(['POST'])
-@authentication_classes([jwt.JWTAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([jwt.JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def create_comment(request):
     serializer = createComment(data=request.data)
     if serializer.is_valid():
@@ -51,8 +51,8 @@ def create_comment(request):
 
 
 @api_view(['POST'])
-@authentication_classes([jwt.JWTAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([jwt.JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def reply_comment(request):
     serializer = CommentReply(data=request.data)
     if serializer.is_valid():
@@ -72,8 +72,8 @@ def reply_comment(request):
 
 
 @api_view(['POST'])
-@authentication_classes([jwt.JWTAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([jwt.JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def report_project(request):
     serializer = ReportProject(data=request.data)
     if serializer.is_valid():
@@ -93,8 +93,8 @@ def report_project(request):
 
 
 @api_view(['POST'])
-@authentication_classes([jwt.JWTAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([jwt.JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def rate_project(request, project_id):
     query = Projects.objects.get(id=project_id)
     serializer = RateProjects(instance=query, data=request.data)
@@ -115,8 +115,8 @@ def rate_project(request, project_id):
 
 
 @api_view(['DELETE'])
-@authentication_classes([jwt.JWTAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([jwt.JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def cancel_project(request, project_id):
     try:
         query = Projects.objects.get(id=project_id)
@@ -145,8 +145,8 @@ def cancel_project(request, project_id):
 
 
 @api_view(['GET'])
-@authentication_classes([jwt.JWTAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([jwt.JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def all_categories(request):
     try:
         query = Categories.objects.all()
@@ -171,8 +171,8 @@ def all_categories(request):
 
 
 @api_view(['GET'])
-@authentication_classes([jwt.JWTAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([jwt.JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def get_all_tags(request):
     try:
         query = Tags.objects.all()
@@ -197,8 +197,8 @@ def get_all_tags(request):
 
 
 @api_view(['GET'])
-@authentication_classes([jwt.JWTAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([jwt.JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def show_similar_project(request, project_id):
     try:
         query = Projects.objects.get(id=project_id)
@@ -247,8 +247,8 @@ def show_project(request, project_id):
 
 
 @api_view(['GET'])
-@authentication_classes([jwt.JWTAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([jwt.JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def get_latest_projects(request):
     try:
         query = Projects.objects.all().order_by('created_at').reverse()[:5]
