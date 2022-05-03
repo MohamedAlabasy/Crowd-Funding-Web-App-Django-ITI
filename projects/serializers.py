@@ -23,11 +23,6 @@ class getProjects(serializers.ModelSerializer):
         model = Projects
         fields = "__all__"
 
-# class getLatestProjects(serializers.ModelSerializer):
-#     class Meta:
-#         model = Projects
-#         fields = ['created_at']
-
 
 class getSingleProject(serializers.ModelSerializer):
     category = getCategories(read_only=True)
@@ -66,3 +61,15 @@ class RateProjects(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = ['rate']
+
+
+class DonateToProject(serializers.ModelSerializer):
+    class Meta:
+        model = Donations
+        fields = '__all__'
+
+
+class updateDonateProjects(serializers.ModelSerializer):
+    class Meta:
+        model = Projects
+        fields = ['current_donation']
