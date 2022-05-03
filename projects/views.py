@@ -2,7 +2,7 @@ from rest_framework.response import Response
 
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
-from .serializers import createProjects, getSingleProject, createComment, CommentReply, ReportProject, RateProjects, getProjects
+from .serializers import createProjects, getSingleProject, getCategories,createComment, CommentReply, ReportProject, RateProjects, getProjects
 from .models import Projects, Categories
 
 
@@ -152,7 +152,7 @@ def all_categories(request):
             serializer = (
                 {
                     "status": 0,
-                    "message": f"There is no user with this id = {user_id}",
+                    "message":"There is no data yet",
                 })
     return Response(serializer)
 
