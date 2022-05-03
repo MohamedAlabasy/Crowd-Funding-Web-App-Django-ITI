@@ -1,31 +1,32 @@
 from ntpath import realpath
 from rest_framework.generics import GenericAPIView
-from rest_framework import response, status, generics
-from .serializer import LoginSerializer, updateProfile, RegisterSerializer, getUserProfile, getUserProjects, getUserDonations
+from rest_framework import response, status, generics, permissions
+from .serializer import LoginSerializer, updateProfile, RegisterSerializer, getUserProfile, getUserProjects, getUserDonations, updateProfile
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
+from rest_framework.decorators import permission_classes, authentication_classes
 from .models import User
 from projects.models import Projects, Donations
 from django.contrib.auth.hashers import check_password
-from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
+from rest_framework.permissions import IsAuthenticated
+from user import jwt
+
 
 # Create your views here.
 
-
+############### Register api #################
 class RegisterApiView(GenericAPIView):
     serializer_class = RegisterSerializer
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-
         if serializer.is_valid():
             if serializer.validated_data['confirm_password'] == serializer.validated_data['password']:
-
                 serializer.save()
                 user_data = serializer.data
                 user = User.objects.get(email=user_data['email'])
@@ -38,7 +39,6 @@ class RegisterApiView(GenericAPIView):
                     ' Use the link below to verify your email \n' + absurl
                 data = {'email_body': email_body, 'to_email': user.email,
                         'email_subject': 'Verify your email'}
-
                 Util.send_email(data)
                 return response.Response(serializer.data, status=status.HTTP_201_CREATED)
             return response.Response({"password_error": "password must match"}, status=status.HTTP_400_BAD_REQUEST)
@@ -46,11 +46,13 @@ class RegisterApiView(GenericAPIView):
         return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+############## Activate Email #################
 class verifyEmail(generics.GenericAPIView):
     def get(self):
         pass
 
 
+##############  Login Api #################
 class LoginApiView(GenericAPIView):
     serializer_class = LoginSerializer
 
@@ -59,14 +61,24 @@ class LoginApiView(GenericAPIView):
         confirm_password = request.data.get('password', None)
         try:
             password = User.objects.values_list('password').get(email=email)
+            is_verified = User.objects.values_list(
+                'is_verifications').get(email=email)
+            is_verified2 = list(is_verified)
             str_password = ''.join(password)
+
             if check_password(confirm_password, str_password):
                 try:
                     user = User.objects.get(email=email)
                 except User.DoesNotExist:
                     user = None
+                if not is_verified2[0]:
+                    return response.Response({'message': "please verify your email"}, status=status.HTTP_401_UNAUTHORIZED)
+
                 if user:
                     serializer = self.serializer_class(user)
+                    User.objects.filter(email=email).update(
+                        is_authenticated=True)
+
                     return response.Response(serializer.data, status=status.HTTP_200_OK)
 
         except:
@@ -80,7 +92,10 @@ class LoginApiView(GenericAPIView):
 
 
 @api_view(['GET'])
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def user_profile(request, user_id):
+
     try:
         query = User.objects.get(id=user_id)
         serializer = getUserProfile(instance=query, read_only=True)
@@ -103,6 +118,8 @@ def user_profile(request, user_id):
 
 
 @api_view(['GET'])
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def user_projects(request, user_id):
     try:
         query = Projects.objects.filter(owner_id=user_id).all()
@@ -131,6 +148,8 @@ def user_projects(request, user_id):
 
 
 @api_view(['GET'])
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def user_donations(request, user_id):
     try:
         query = Donations.objects.filter(user_id=user_id).all()
@@ -159,7 +178,9 @@ def user_donations(request, user_id):
 
 
 @api_view(['POST'])
-def update_user(request):
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def update_user(request, user_id):
     query = User.objects.get(id=request.data['id'])
     serializer = updateProfile(instance=query, data=request.data)
     if serializer.is_valid():
@@ -183,6 +204,8 @@ def update_user(request):
 #=======================================================================================#
 
 @api_view(['DELETE'])
+@authentication_classes([jwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def delete_user(request, user_id):
     try:
         User.objects.get(id=user_id).delete()
