@@ -2,8 +2,8 @@ from rest_framework.response import Response
 
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
-from .serializers import createProjects, getSingleProject, getCategories,createComment, CommentReply, ReportProject, RateProjects, getProjects
-from .models import Projects, Categories
+from .serializers import createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, RateProjects, getProjects
+from .models import Projects, Categories, Tags
 
 
 @api_view(['POST'])
@@ -152,7 +152,31 @@ def all_categories(request):
             serializer = (
                 {
                     "status": 0,
-                    "message":"There is no data yet",
+                    "message": "There is no data yet",
+                })
+    return Response(serializer)
+
+
+@api_view(['GET'])
+def all_tags(request):
+    try:
+        query = Tags.objects.all()
+        serializer = getTags(query, many=True, read_only=True).data
+        if len(serializer) > 0:
+            serializer = (
+                {
+                    "status": 1,
+                    "count": len(serializer),
+                    "data": serializer
+                })
+        else:
+            raise serializers.ValidationError("no data to show")
+    except:
+        if Projects.DoesNotExist:
+            serializer = (
+                {
+                    "status": 0,
+                    "message": "There is no Tags to show",
                 })
     return Response(serializer)
 
@@ -209,9 +233,6 @@ def show_project(request, project_id):
 @api_view(['GET'])
 def get_latest_projects(request):
     try:
-        # query = Projects.objects.all()
-        # serializer = getProjects(query).data
-
         query = Projects.objects.all().order_by('created_at').reverse()[:5]
         serializer = getProjects(query, many=True).data
 
