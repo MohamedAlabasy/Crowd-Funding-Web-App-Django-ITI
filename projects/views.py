@@ -249,36 +249,26 @@ def get_latest_projects(request):
 
 
 def update_donate_project(project_id, paid_up):
-    # try:
     query = Projects.objects.get(id=project_id)
-    # except:
-    # serializer = (
-    #         {
-    #             "status": 0,
-    #             "message": f"There is no project with this id = {project_id}"
-    #         })
-    #     return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+    if paid_up + query.current_donation > query.total_target:
+        serializer = ({
+            "status": 0,
+            "message": f"You cannot donate more than {query.total_target-query.current_donation} to this project",
+        })
+        raise serializers.ValidationError(serializer)
     data = {
-        "current_donation": paid_up
+        "current_donation": paid_up + query.current_donation
     }
-    print(project_id, paid_up)
     serializer = updateDonateProjects(instance=query, data=data)
-    print(serializer.is_valid())
     if serializer.is_valid():
         serializer.save()
-        print(serializer.data)
-        serializer = ({
-            "status": 1,
-            "errors": "serializer.errors"
-        })
-        return Response(serializer)
-
+        return
     else:
         serializer = ({
             "status": 0,
             "errors": serializer.errors
         })
-        return Response(serializer)
+        raise serializers.ValidationError(serializer)
 
 
 @api_view(['POST'])
