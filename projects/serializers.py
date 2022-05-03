@@ -22,11 +22,12 @@ class getProjects(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = "__all__"
-    
-class getLatestProjects(serializers.ModelSerializer):
-    class Meta:
-        model = Projects
-        fields = ['created_at']
+
+# class getLatestProjects(serializers.ModelSerializer):
+#     class Meta:
+#         model = Projects
+#         fields = ['created_at']
+
 
 class getSingleProject(serializers.ModelSerializer):
     category = getCategories(read_only=True)
