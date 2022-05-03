@@ -10,12 +10,13 @@ urlpatterns = [
     path('comment/add', create_comment),
     path('comment/reply/add', reply_comment),
     path('report/add', report_project),
-    path('rate/<int:project_id>', rate_project),
     path('cancel/<int:project_id>', cancel_project),
     path('show/<int:project_id>', show_similar_project),
     path('single/<int:project_id>', show_project),
     path('latest', get_latest_projects),
     path('categories', all_categories),
     path('tags', get_all_tags),
+
+    path('rate/<int:project_id>', rate_project),
     path('donate/<int:project_id>', donate_project),
 ]

@@ -57,12 +57,6 @@ class ReportProject(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class RateProjects(serializers.ModelSerializer):
-    class Meta:
-        model = Projects
-        fields = ['rate']
-
-
 class DonateToProject(serializers.ModelSerializer):
     class Meta:
         model = Donations
@@ -73,3 +67,15 @@ class updateDonateProjects(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = ['current_donation']
+
+
+class RateProjects(serializers.ModelSerializer):
+    class Meta:
+        model = Rates
+        fields = '__all__'
+
+
+class updateRateProjects(serializers.ModelSerializer):
+    class Meta:
+        model = Projects
+        fields = ['rate']

@@ -2,8 +2,8 @@ from rest_framework.response import Response
 
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
-from .serializers import updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, RateProjects, getProjects
-from .models import Projects, Categories, Tags
+from .serializers import updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
+from .models import Projects, Categories, Tags, Rates
 
 
 @api_view(['POST'])
@@ -71,26 +71,6 @@ def report_project(request):
         serializer = ({
             "status": 1,
             "message": "report created successfully",
-            "date": serializer.data
-        })
-        return Response(serializer, status=status.HTTP_201_CREATED)
-    else:
-        serializer = ({
-            "status": 0,
-            "errors": serializer.errors
-        })
-        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
-
-
-@api_view(['POST'])
-def rate_project(request, project_id):
-    query = Projects.objects.get(id=project_id)
-    serializer = RateProjects(instance=query, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        serializer = ({
-            "status": 1,
-            "message": "Project created successfully",
             "date": serializer.data
         })
         return Response(serializer, status=status.HTTP_201_CREATED)
@@ -297,3 +277,58 @@ def donate_project(request, project_id):
             "errors": serializer.errors
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+def rate_project(request, project_id):
+    request.data['project'] = project_id
+    serializer = RateProjects(data=request.data)
+    if serializer.is_valid():
+        if request.data['rate'] > 5 or request.data['rate'] < 0:
+            serializer = ({
+                "status": 0,
+                "message": "You must enter rate only between 0 and 5"
+            })
+            return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+        else:
+            update_rate_project(project_id)
+            serializer.save()
+            serializer = ({
+                "status": 1,
+                "message": "Rated successfully",
+                "date": serializer.data
+            })
+            return Response(serializer, status=status.HTTP_201_CREATED)
+    else:
+        serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+        })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
+def update_rate_project(project_id):
+    project_query = Projects.objects.get(id=project_id)
+
+    rate_query = Rates.objects.filter(project_id=project_id).all()
+    total_rates = RateProjects(rate_query, many=True).data
+
+    user_rate = 0
+    for rate in total_rates:
+        user_rate = user_rate + rate['rate']
+
+    data = {
+        "rate": round(user_rate/(len(total_rates)*5)*5)
+    }
+    serializer = updateRateProjects(instance=project_query, data=data)
+    if serializer.is_valid():
+        serializer.save()
+
+        return
+
+    else:
+        serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+        })
+        raise serializers.ValidationError(serializer)
