@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from projects.models import Categories, Tags, Projects, Pictures, Comments, Replies, Reports, Donations
+from projects.models import Categories, Rates, Tags, Projects, Pictures, Comments, Replies, Reports, Donations
 from user.models import User
 
 
@@ -22,11 +22,7 @@ class getProjects(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = "__all__"
-    
-class getLatestProjects(serializers.ModelSerializer):
-    class Meta:
-        model = Projects
-        fields = ['created_at']
+
 
 class getSingleProject(serializers.ModelSerializer):
     category = getCategories(read_only=True)
@@ -61,7 +57,25 @@ class ReportProject(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class DonateToProject(serializers.ModelSerializer):
+    class Meta:
+        model = Donations
+        fields = '__all__'
+
+
+class updateDonateProjects(serializers.ModelSerializer):
+    class Meta:
+        model = Projects
+        fields = ['current_donation']
+
+
 class RateProjects(serializers.ModelSerializer):
+    class Meta:
+        model = Rates
+        fields = '__all__'
+
+
+class updateRateProjects(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = ['rate']

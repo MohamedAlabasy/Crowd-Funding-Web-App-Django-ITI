@@ -19,6 +19,7 @@ class User(models.Model):
     Birth_date=models.DateField(null=True,blank=True)
     facebook_profile=models.URLField(max_length = 200,null=True,blank=True)
     is_verifications=models.BooleanField(null=True)
+    is_authenticated = models.BooleanField(null=True)
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
