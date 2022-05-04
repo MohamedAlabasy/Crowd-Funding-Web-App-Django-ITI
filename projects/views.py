@@ -3,13 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
-<<<<<<< HEAD
 from user import myjwt
-from .serializers import ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
-=======
-from user import jwt
 from .serializers import ProjectsCategoris, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
->>>>>>> 072bb06ffc3d67fbf78e7e524ef278f617bad1c1
 from .models import Projects, Categories, Tags, Rates, Pictures
 
 
@@ -337,8 +332,8 @@ def rate_project(request):
             })
             return Response(serializer, status=status.HTTP_404_NOT_FOUND)
         else:
-            update_rate_project(request.data['project'])
             serializer.save()
+            update_rate_project(request.data['rate'], request.data['project'])
             serializer = ({
                 "status": 1,
                 "message": "Rated successfully",
@@ -353,7 +348,7 @@ def rate_project(request):
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
-def update_rate_project(project_id):
+def update_rate_project(current_rate, project_id):
     project_query = Projects.objects.get(id=project_id)
 
     rate_query = Rates.objects.filter(project_id=project_id).all()
@@ -363,8 +358,13 @@ def update_rate_project(project_id):
     for rate in total_rates:
         user_rate = user_rate + rate['rate']
 
+    rate_value = 0
+    if len(total_rates) == 0:
+        rate_value = round(current_rate/(1 * 5)*5)
+    else:
+        rate_value = round(user_rate/(len(total_rates)*5)*5)
     data = {
-        "rate": round(user_rate/(len(total_rates)*5)*5)
+        "rate": rate_value
     }
     serializer = updateRateProjects(instance=project_query, data=data)
     if serializer.is_valid():
