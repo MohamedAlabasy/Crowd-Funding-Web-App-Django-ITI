@@ -1,11 +1,11 @@
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes,authentication_classes
+from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
 from user import jwt
 from .serializers import ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
-from .models import Projects, Categories, Tags, Rates,Pictures
+from .models import Projects, Categories, Tags, Rates, Pictures
 
 
 @api_view(['POST'])
@@ -376,16 +376,13 @@ def update_rate_project(project_id):
         raise serializers.ValidationError(serializer)
 
 
-
-
-
 @api_view(['GET'])
 def project_pictures(request, project_id):
     # print(project_id)
     try:
 
         query = Pictures.objects.filter(project_id=project_id).all()
-        serializer = ProjectsPictures(query,many=True).data
+        serializer = ProjectsPictures(query, many=True).data
         serializer = ({
             "status": 1,
             "data": serializer,
@@ -400,3 +397,45 @@ def project_pictures(request, project_id):
                 "message": f"There is no images with this id = {project_id}",
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def all_project(request):
+    try:
+        query = Projects.objects.all()
+        serializer = getProjects(query, many=True).data
+        serializer = ({
+            "status": 1,
+            "count": len(serializer),
+            "data": serializer,
+        })
+        return Response(serializer, status=status.HTTP_200_OK)
+    except:
+        serializer = (
+            {
+                "status": 0,
+                "message": 'no projets to show',
+            })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
+# @api_view(['POST'])
+# @authentication_classes([jwt.JWTAuthentication])
+# @permission_classes([IsAuthenticated])
+# def add_project_images(request):
+#     print(request.data['id'])
+    # serializer = ProjectsPictures(data=request.data)
+    # if serializer.is_valid():
+    #     serializer.save()
+    #     serializer = ({
+    #         "status": 1,
+    #         "message": "Project created successfully",
+    #         "date": serializer.data
+    #     })
+    #     return Response(serializer, status=status.HTTP_201_CREATED)
+    # else:
+    #     serializer = ({
+    #         "status": 0,
+    #         "errors": serializer.errors
+    #     })
+    #     return Response(serializer, status=status.HTTP_404_NOT_FOUND)
