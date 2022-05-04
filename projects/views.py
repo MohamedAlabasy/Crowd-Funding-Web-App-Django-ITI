@@ -374,3 +374,26 @@ def update_rate_project(project_id):
             "errors": serializer.errors
         })
         raise serializers.ValidationError(serializer)
+
+
+
+
+
+@api_view(['GET'])
+def project_pictures(request, project_id):
+    try:
+        query = Projects.objects.get(id=project_id)
+        serializer = ProjectsPictures(query).data
+        serializer = ({
+            "status": 1,
+            "data": serializer,
+        })
+        return Response(serializer, status=status.HTTP_200_OK)
+    except:
+
+        serializer = (
+            {
+                "status": 0,
+                "message": f"There is no images with this id = {project_id}",
+            })
+    return Response(serializer, status=status.HTTP_404_NOT_FOUND)
