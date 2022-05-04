@@ -322,8 +322,7 @@ def donate_project(request):
 
 
 @api_view(['POST'])
-def rate_project(request, project_id):
-    request.data['project'] = project_id
+def rate_project(request):
     serializer = RateProjects(data=request.data)
     if serializer.is_valid():
         if request.data['rate'] > 5 or request.data['rate'] < 0:
@@ -333,7 +332,7 @@ def rate_project(request, project_id):
             })
             return Response(serializer, status=status.HTTP_404_NOT_FOUND)
         else:
-            update_rate_project(project_id)
+            update_rate_project(request.data['project'])
             serializer.save()
             serializer = ({
                 "status": 1,
