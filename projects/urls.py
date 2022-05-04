@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import all_project, add_project_images, project_pictures, get_all_tags, donate_project, get_latest_projects, show_project, show_similar_project, create_project, create_comment, reply_comment, report_project, rate_project, cancel_project, all_categories
+from .views import project_category, all_project, add_project_images, project_pictures, get_all_tags, donate_project, get_latest_projects, show_project, show_similar_project, create_project, create_comment, reply_comment, report_project, rate_project, cancel_project, all_categories
 
 #=======================================================================================#
 #			                                URLS                                     	#
@@ -21,5 +21,5 @@ urlpatterns = [
     path('donate/<int:project_id>', donate_project),
     path('pictures/<int:project_id>', project_pictures),
     path('add/images', add_project_images),
-
+    path('category/<int:category_id>', project_category),
 ]
