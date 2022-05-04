@@ -423,6 +423,7 @@ def all_project(request):
 # @authentication_classes([jwt.JWTAuthentication])
 # @permission_classes([IsAuthenticated])
 def add_project_images(request):
+    # print(request.FILES.getlist('image'))
     serializer = ProjectsPictures(data=request.data)
     if serializer.is_valid():
         serializer.save()
