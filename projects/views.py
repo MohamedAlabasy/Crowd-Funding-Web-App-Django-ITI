@@ -4,7 +4,7 @@ from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
 from user import jwt
-from .serializers import  ProjectsCategoris,ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
+from .serializers import ProjectsCategoris, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
 from .models import Projects, Categories, Tags, Rates, Pictures
 
 
@@ -294,8 +294,7 @@ def update_donate_project(project_id, paid_up):
 
 
 @api_view(['POST'])
-def donate_project(request, project_id):
-    request.data['project'] = project_id
+def donate_project(request):
     serializer = DonateToProject(data=request.data)
     if serializer.is_valid():
         if request.data['paid_up'] == 0 or not request.data['paid_up']:
@@ -305,7 +304,8 @@ def donate_project(request, project_id):
             })
             return Response(serializer, status=status.HTTP_404_NOT_FOUND)
         else:
-            update_donate_project(project_id, request.data['paid_up'])
+            update_donate_project(
+                request.data['project'], request.data['paid_up'])
             serializer.save()
             serializer = ({
                 "status": 1,
@@ -439,12 +439,13 @@ def add_project_images(request):
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(['GET'])
 def project_category(request, category_id):
     try:
         # query =Projects.objects.get(id=project_id)
-        query =Projects.objects.filter(category_id=category_id).all()
-        serializer = ProjectsCategoris(query,many=True).data
+        query = Projects.objects.filter(category_id=category_id).all()
+        serializer = ProjectsCategoris(query, many=True).data
         serializer = ({
             "status": 1,
             "data": serializer,

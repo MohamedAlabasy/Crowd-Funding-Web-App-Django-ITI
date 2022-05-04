@@ -18,7 +18,7 @@ urlpatterns = [
     path('categories', all_categories),
     path('tags', get_all_tags),
     path('rate/<int:project_id>', rate_project),
-    path('donate/<int:project_id>', donate_project),
+    path('donate', donate_project),
     path('pictures/<int:project_id>', project_pictures),
     path('add/images', add_project_images),
     path('category/<int:category_id>', project_category),
