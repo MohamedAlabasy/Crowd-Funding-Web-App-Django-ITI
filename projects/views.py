@@ -441,7 +441,6 @@ def add_project_images(request):
 @api_view(['GET'])
 def project_category(request, category_id):
     try:
-        # query =Projects.objects.get(id=project_id)
         query =Projects.objects.filter(category_id=category_id).all()
         serializer = ProjectsCategoris(query,many=True).data
         serializer = ({
@@ -457,3 +456,10 @@ def project_category(request, category_id):
                 "message": f"There is no category with this id = {project_id}",
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
+
+# @api_view(['GET'])
+# def average_rating(request, project_id):
+    
+    
