@@ -3,8 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
-from user import jwt
-from .serializers import  ProjectsCategoris,ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
+from user import myjwt
+from .serializers import ProjectsCategoris, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
 from .models import Projects, Categories, Tags, Rates, Pictures
 
 
@@ -294,8 +294,7 @@ def update_donate_project(project_id, paid_up):
 
 
 @api_view(['POST'])
-def donate_project(request, project_id):
-    request.data['project'] = project_id
+def donate_project(request):
     serializer = DonateToProject(data=request.data)
     if serializer.is_valid():
         if request.data['paid_up'] == 0 or not request.data['paid_up']:
@@ -305,7 +304,8 @@ def donate_project(request, project_id):
             })
             return Response(serializer, status=status.HTTP_404_NOT_FOUND)
         else:
-            update_donate_project(project_id, request.data['paid_up'])
+            update_donate_project(
+                request.data['project'], request.data['paid_up'])
             serializer.save()
             serializer = ({
                 "status": 1,
@@ -322,8 +322,7 @@ def donate_project(request, project_id):
 
 
 @api_view(['POST'])
-def rate_project(request, project_id):
-    request.data['project'] = project_id
+def rate_project(request):
     serializer = RateProjects(data=request.data)
     if serializer.is_valid():
         if request.data['rate'] > 5 or request.data['rate'] < 0:
@@ -333,8 +332,8 @@ def rate_project(request, project_id):
             })
             return Response(serializer, status=status.HTTP_404_NOT_FOUND)
         else:
-            update_rate_project(project_id)
             serializer.save()
+            update_rate_project(request.data['rate'], request.data['project'])
             serializer = ({
                 "status": 1,
                 "message": "Rated successfully",
@@ -349,7 +348,7 @@ def rate_project(request, project_id):
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
-def update_rate_project(project_id):
+def update_rate_project(current_rate, project_id):
     project_query = Projects.objects.get(id=project_id)
 
     rate_query = Rates.objects.filter(project_id=project_id).all()
@@ -359,8 +358,13 @@ def update_rate_project(project_id):
     for rate in total_rates:
         user_rate = user_rate + rate['rate']
 
+    rate_value = 0
+    if len(total_rates) == 0:
+        rate_value = round(current_rate/(1 * 5)*5)
+    else:
+        rate_value = round(user_rate/(len(total_rates)*5)*5)
     data = {
-        "rate": round(user_rate/(len(total_rates)*5)*5)
+        "rate": rate_value
     }
     serializer = updateRateProjects(instance=project_query, data=data)
     if serializer.is_valid():
@@ -422,6 +426,7 @@ def all_project(request):
 # @authentication_classes([jwt.JWTAuthentication])
 # @permission_classes([IsAuthenticated])
 def add_project_images(request):
+    # print(request.FILES.getlist('image'))
     serializer = ProjectsPictures(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -438,11 +443,13 @@ def add_project_images(request):
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(['GET'])
 def project_category(request, category_id):
     try:
-        query =Projects.objects.filter(category_id=category_id).all()
-        serializer = ProjectsCategoris(query,many=True).data
+        # query =Projects.objects.get(id=project_id)
+        query = Projects.objects.filter(category_id=category_id).all()
+        serializer = ProjectsCategoris(query, many=True).data
         serializer = ({
             "status": 1,
             "data": serializer,
@@ -456,10 +463,3 @@ def project_category(request, category_id):
                 "message": f"There is no category with this id = {project_id}",
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
-
-
-
-# @api_view(['GET'])
-# def average_rating(request, project_id):
-    
-    
