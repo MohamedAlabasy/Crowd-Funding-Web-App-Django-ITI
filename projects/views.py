@@ -419,23 +419,22 @@ def all_project(request):
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
-# @api_view(['POST'])
+@api_view(['POST'])
 # @authentication_classes([jwt.JWTAuthentication])
 # @permission_classes([IsAuthenticated])
-# def add_project_images(request):
-#     print(request.data['id'])
-    # serializer = ProjectsPictures(data=request.data)
-    # if serializer.is_valid():
-    #     serializer.save()
-    #     serializer = ({
-    #         "status": 1,
-    #         "message": "Project created successfully",
-    #         "date": serializer.data
-    #     })
-    #     return Response(serializer, status=status.HTTP_201_CREATED)
-    # else:
-    #     serializer = ({
-    #         "status": 0,
-    #         "errors": serializer.errors
-    #     })
-    #     return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+def add_project_images(request):
+    serializer = ProjectsPictures(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        serializer = ({
+            "status": 1,
+            "message": "pictures added successfully",
+            "date": serializer.data
+        })
+        return Response(serializer, status=status.HTTP_201_CREATED)
+    else:
+        serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+        })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
