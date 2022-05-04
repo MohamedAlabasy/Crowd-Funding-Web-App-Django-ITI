@@ -21,5 +21,5 @@ urlpatterns = [
     path('donate/<int:project_id>', donate_project),
     path('pictures/<int:project_id>', project_pictures),
     path('add/images', add_project_images),
-    path('category/<int:project_id>', project_category),
+    path('category/<int:category_id>', project_category),
 ]

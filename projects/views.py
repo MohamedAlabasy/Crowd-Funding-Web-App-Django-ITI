@@ -439,11 +439,11 @@ def add_project_images(request):
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-def project_category(request, project_id):
+def project_category(request, category_id):
     try:
-        query =Projects.objects.get(id=project_id)
-        # query =Projects.objects.filter('[category_id]')
-        serializer = ProjectsCategoris(query).data
+        # query =Projects.objects.get(id=project_id)
+        query =Projects.objects.filter(category_id=category_id).all()
+        serializer = ProjectsCategoris(query,many=True).data
         serializer = ({
             "status": 1,
             "data": serializer,

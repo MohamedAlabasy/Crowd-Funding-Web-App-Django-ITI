@@ -95,5 +95,5 @@ class ProjectsPictures(serializers.ModelSerializer):
 
 class ProjectsCategoris(serializers.ModelSerializer):
     class Meta:
-        model = Categories
+        model = Projects
         fields = '__all__'
