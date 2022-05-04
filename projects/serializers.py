@@ -8,15 +8,23 @@ class getCategories(serializers.ModelSerializer):
         model = Categories
         fields = "__all__"
 
+
 class getTags(serializers.ModelSerializer):
     class Meta:
         model = Tags
         fields = "__all__"
 
 
+class getUser(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
+
 class getProjects(serializers.ModelSerializer):
     category = getCategories(read_only=True)
     tag = getTags(many=True, read_only=True)
+    owner = getUser(read_only=True)
 
     class Meta:
         model = Projects
@@ -78,6 +86,7 @@ class updateRateProjects(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = ['rate']
+
 
 class ProjectsPictures(serializers.ModelSerializer):
     class Meta:
