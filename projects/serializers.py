@@ -82,4 +82,4 @@ class updateRateProjects(serializers.ModelSerializer):
 class ProjectsPictures(serializers.ModelSerializer):
     class Meta:
         model = Pictures
-        fields = "__all__"
+        fields = '__all__'
