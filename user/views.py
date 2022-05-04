@@ -217,6 +217,6 @@ def delete_user(request, user_id):
     except:
         serializer = ({
             "status": 0,
-            "message": "NOT FOUND",
+            "message": f"There is no donations with this user id = {user_id}",
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
