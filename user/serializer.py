@@ -1,3 +1,5 @@
+from pyexpat import model
+from attr import field
 from rest_framework import serializers
 from .models import User
 from django.contrib.auth.hashers import make_password
@@ -35,6 +37,15 @@ class LoginSerializer(serializers.ModelSerializer):
         model = User
         fields = ('email', 'password','id','token','first_name','last_name','mobile_phone','email','profile_image','country','Birth_date','facebook_profile','is_verifications')
         read_only_fields = ['token','id','first_name','last_name','mobile_phone','profile_image','country','Birth_date','facebook_profile','is_verifications']
+
+
+###########Email Verify ##################
+class EmailVerificationSerializer(serializers.ModelSerializer):
+    token=serializers.CharField( max_length=555)
+
+    class Meta():
+        model=User
+        fields=['token']
 
 
 #=======================================================================================#

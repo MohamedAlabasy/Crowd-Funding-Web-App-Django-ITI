@@ -1,7 +1,8 @@
 from ntpath import realpath
+from django.views import View
 from rest_framework.generics import GenericAPIView
-from rest_framework import response, status, generics, permissions
-from .serializer import LoginSerializer, updateProfile, RegisterSerializer, getUserProfile, getUserProjects, getUserDonations, updateProfile
+from rest_framework import response, status, generics, permissions,views
+from .serializer import LoginSerializer, updateProfile, RegisterSerializer, getUserProfile, getUserProjects, getUserDonations, updateProfile,EmailVerificationSerializer
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
@@ -14,7 +15,10 @@ from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from rest_framework.permissions import IsAuthenticated
-from user import jwt
+from user import myjwt
+from django.conf import settings
+import jwt
+from user import serializer
 
 
 # Create your views here.
@@ -47,9 +51,24 @@ class RegisterApiView(GenericAPIView):
 
 
 ############## Activate Email #################
-class verifyEmail(generics.GenericAPIView):
-    def get(self):
-        pass
+class verifyEmail(views.APIView):
+    serializer_class=EmailVerificationSerializer
+    def get(self,request):
+        token=request.GET.get('token')
+        try:
+           payload=jwt.decode(token,settings.SECRET_KEY )
+           print(payload)
+           user=User.objects.get(id=payload['user_id'])
+           if not user.is_verifications:
+             user.is_verifications=True
+             user.save();
+           return response.Response({'email'':''successfully activated'}, status=status.HTTP_200_OK)
+
+
+        except jwt.ExpiredSignatureError as identifier:
+                return response.Response({'error'':''ACTIVATION LINK EXPIRED'}, status=status.HTTP_400_BAD_REQUEST)
+        except jwt.exceptions.DecodeError as identifier:
+                return response.Response({'error'':''invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 ##############  Login Api #################
@@ -217,6 +236,6 @@ def delete_user(request, user_id):
     except:
         serializer = ({
             "status": 0,
-            "message": f"There is no donations with this user id = {user_id}",
+            "message": f"There is no user with this id = {user_id}",
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
