@@ -4,7 +4,7 @@ from rest_framework.decorators import permission_classes,authentication_classes
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
 from user import jwt
-from .serializers import ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
+from .serializers import ProjectsCategoris, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
 from .models import Projects, Categories, Tags, Rates,Pictures
 
 
@@ -383,7 +383,6 @@ def update_rate_project(project_id):
 def project_pictures(request, project_id):
     # print(project_id)
     try:
-
         query = Pictures.objects.filter(project_id=project_id).all()
         serializer = ProjectsPictures(query,many=True).data
         serializer = ({
@@ -398,5 +397,28 @@ def project_pictures(request, project_id):
             {
                 "status": 0,
                 "message": f"There is no images with this id = {project_id}",
+            })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def project_category(request, project_id):
+    # print(project_id)
+    try:
+        query =Projects.objects.get(id=project_id)
+        # query =Projects.objects.filter('[category_id]')
+        serializer = ProjectsCategoris(query).data
+        serializer = ({
+            "status": 1,
+            "data": serializer,
+        })
+        #print(serializer)
+        return Response(serializer, status=status.HTTP_200_OK)
+    except:
+
+        serializer = (
+            {
+                "status": 0,
+                "message": f"There is no category with this id = {project_id}",
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
