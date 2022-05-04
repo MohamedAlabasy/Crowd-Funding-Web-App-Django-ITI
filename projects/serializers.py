@@ -8,7 +8,6 @@ class getCategories(serializers.ModelSerializer):
         model = Categories
         fields = "__all__"
 
-
 class getTags(serializers.ModelSerializer):
     class Meta:
         model = Tags
@@ -79,3 +78,8 @@ class updateRateProjects(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = ['rate']
+
+class ProjectsPictures(serializers.ModelSerializer):
+    class Meta:
+        model = Pictures
+        fields = "__all__"

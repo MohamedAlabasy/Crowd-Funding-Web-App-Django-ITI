@@ -374,3 +374,35 @@ def update_rate_project(project_id):
             "errors": serializer.errors
         })
         raise serializers.ValidationError(serializer)
+
+
+
+
+
+@api_view(['POST'])
+def project_pictures(request, project_id):
+   
+        request.data['project'] = project_id
+        serializer = ProjectsPictures(data=request.data)
+        if serializer.is_valid():
+            if request.data['image'] == 0 or not request.data['image']:
+                serializer = ({
+                "status": 0,
+                "message": "You must enter any image"
+            })
+                return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+            else:
+             ProjectsPictures(project_id, request.data['image'])
+            serializer.save()
+            serializer = ({
+                "status": 1,
+                "message": "update image successfully",
+                "date": serializer.data
+             })
+            return Response(serializer, status=status.HTTP_201_CREATED)
+        else:
+            serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+            })
+            return Response(serializer, status=status.HTTP_404_NOT_FOUND)
