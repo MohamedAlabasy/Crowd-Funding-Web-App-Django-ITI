@@ -332,8 +332,8 @@ def rate_project(request):
             })
             return Response(serializer, status=status.HTTP_404_NOT_FOUND)
         else:
-            update_rate_project(request.data['project'])
             serializer.save()
+            update_rate_project(request.data['rate'], request.data['project'])
             serializer = ({
                 "status": 1,
                 "message": "Rated successfully",
@@ -348,7 +348,7 @@ def rate_project(request):
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
-def update_rate_project(project_id):
+def update_rate_project(current_rate, project_id):
     project_query = Projects.objects.get(id=project_id)
 
     rate_query = Rates.objects.filter(project_id=project_id).all()
@@ -358,8 +358,13 @@ def update_rate_project(project_id):
     for rate in total_rates:
         user_rate = user_rate + rate['rate']
 
+    rate_value = 0
+    if len(total_rates) == 0:
+        rate_value = round(current_rate/(1 * 5)*5)
+    else:
+        rate_value = round(user_rate/(len(total_rates)*5)*5)
     data = {
-        "rate": round(user_rate/(len(total_rates)*5)*5)
+        "rate": rate_value
     }
     serializer = updateRateProjects(instance=project_query, data=data)
     if serializer.is_valid():
