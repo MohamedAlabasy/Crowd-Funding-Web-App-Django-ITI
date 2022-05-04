@@ -213,7 +213,7 @@ def show_latest_projects(request):
         # query = Projects.objects.all()
         # serializer = getProjects(query).data
 
-        query2 = Projects.objects.order_by('create_at').last()
+        query2 = Projects.objects.order_by('created_at').last()
         serializer_created_at = getLatestProjects(
             query2, many=True).data
 
