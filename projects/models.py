@@ -94,7 +94,7 @@ class Replies(models.Model):
 class ReportsProject(models.Model):
     reason = models.TextField(blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    project = models.ForeignKey(Projects, on_delete=models.CASCADE, blank=True)
+    project = models.ForeignKey(Projects, on_delete=models.CASCADE)
 
     def __str__(self):
         return f" {self.user.first_name} {self.user.last_name} on report {self.project.title} "
@@ -107,7 +107,7 @@ class ReportsProject(models.Model):
 class ReportsComment(models.Model):
     reason = models.TextField(blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comments, on_delete=models.CASCADE, blank=True)
+    comment = models.ForeignKey(Comments, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} on report id = {self.comment.id}"

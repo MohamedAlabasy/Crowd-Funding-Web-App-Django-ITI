@@ -4,7 +4,7 @@ from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
 from user import myjwt
-from .serializers import ProjectsTags, ProjectsSearchBarTags, ProjectsSearchBarTitle, ProjectsCategoris, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
+from .serializers import ProjectsTags, ProjectsSearchBarTags, ProjectsSearchBarTitle, ProjectsCategoris, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, ReportsComment, updateRateProjects, RateProjects, getProjects
 from .models import Projects, Categories, Tags, Rates, Pictures
 
 
@@ -154,6 +154,27 @@ def reply_comment(request):
 # @permission_classes([IsAuthenticated])
 def report_project(request):
     serializer = ReportProject(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        serializer = ({
+            "status": 1,
+            "message": "report created successfully",
+            "date": serializer.data
+        })
+        return Response(serializer, status=status.HTTP_201_CREATED)
+    else:
+        serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+        })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+# @authentication_classes([jwt.JWTAuthentication])
+# @permission_classes([IsAuthenticated])
+def report_comment(request):
+    serializer = ReportsComment(data=request.data)
     if serializer.is_valid():
         serializer.save()
         serializer = ({
