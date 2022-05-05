@@ -46,7 +46,6 @@ class getProjects(serializers.ModelSerializer):
             "owner",
             "tag"
         )
-        # fields = '__all__'
 
 
 class getSingleProject(serializers.ModelSerializer):
@@ -117,8 +116,8 @@ class ProjectsCategoris(serializers.ModelSerializer):
         model = Projects
         fields = '__all__'
 
+
 class ProjectsSearchBar(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = '__all__'
-        
