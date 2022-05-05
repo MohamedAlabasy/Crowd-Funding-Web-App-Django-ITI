@@ -22,5 +22,5 @@ urlpatterns = [
     path('pictures/<int:project_id>', project_pictures),
     path('add/images', add_project_images),
     path('category/<int:category_id>', project_category),
-    path('search/<project_title>', search_bar),
+    path('search/<str:project_title>', search_bar),
 ]

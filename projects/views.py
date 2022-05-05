@@ -467,9 +467,9 @@ def project_category(request, category_id):
 
 @api_view(['GET'])
 def search_bar(request, project_title):
+    print(project_title)
     try:
-        # query = Projects.objects.get(project_title=project_title)
-        query = Projects.objects.filter(project_title=project_title).all()
+        query = Projects.objects.get(title=project_title)
         serializer = ProjectsSearchBar(query).data
         serializer = ({
             "status": 1,
