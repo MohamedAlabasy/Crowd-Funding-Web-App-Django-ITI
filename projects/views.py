@@ -355,8 +355,8 @@ def get_latest_projects(request):
 
         serializer = ({
             "status": 1,
+            'count':len(serializer),
             'projects': serializer,
-
         })
         return Response(serializer, status=status.HTTP_200_OK)
     except:
