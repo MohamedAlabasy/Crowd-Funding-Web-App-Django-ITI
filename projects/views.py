@@ -4,7 +4,7 @@ from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
 from user import myjwt
-from .serializers import ProjectsTags, ProjectsSearchBarTags, ProjectsSearchBarTitle, ProjectsCategoris, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, ReportsComment, updateRateProjects, RateProjects, getProjects
+from .serializers import ProjectsTags, ProjectsSearchBarTags, ProjectsSearchBarTitle, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, ReportsComment, updateRateProjects, RateProjects, getProjects
 from .models import Projects, Categories, Tags, Rates, Pictures
 
 
@@ -355,7 +355,7 @@ def get_latest_projects(request):
 
         serializer = ({
             "status": 1,
-            'count':len(serializer),
+            'count': len(serializer),
             'projects': serializer,
         })
         return Response(serializer, status=status.HTTP_200_OK)
@@ -479,26 +479,26 @@ def update_rate_project(current_rate, project_id):
         raise serializers.ValidationError(serializer)
 
 
-@api_view(['GET'])
-def project_pictures(request, project_id):
-    # print(project_id)
-    try:
-        query = Pictures.objects.filter(project_id=project_id).all()
-        serializer = ProjectsPictures(query, many=True).data
-        serializer = ({
-            "status": 1,
-            "data": serializer,
-        })
-        # print(serializer)
-        return Response(serializer, status=status.HTTP_200_OK)
-    except:
+# @api_view(['GET'])
+# def project_pictures(request, project_id):
+#     # print(project_id)
+#     try:
+#         query = Pictures.objects.filter(project_id=project_id).all()
+#         serializer = ProjectsPictures(query, many=True).data
+#         serializer = ({
+#             "status": 1,
+#             "data": serializer,
+#         })
+#         # print(serializer)
+#         return Response(serializer, status=status.HTTP_200_OK)
+#     except:
 
-        serializer = (
-            {
-                "status": 0,
-                "message": f"There is no images with this id = {project_id}",
-            })
-        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+#         serializer = (
+#             {
+#                 "status": 0,
+#                 "message": f"There is no images with this id = {project_id}",
+#             })
+#         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
@@ -526,7 +526,7 @@ def project_category(request, category_id):
     try:
         # query =Projects.objects.get(id=project_id)
         query = Projects.objects.filter(category_id=category_id).all()
-        serializer = ProjectsCategoris(query, many=True).data
+        serializer = getProjects(query, many=True).data
         serializer = ({
             "status": 1,
             "data": serializer,
