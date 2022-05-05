@@ -20,6 +20,8 @@ from django.conf import settings
 import jwt
 from user import serializer
 from django.http import HttpResponseRedirect
+import re
+
 
 
 
@@ -31,7 +33,15 @@ class RegisterApiView(GenericAPIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
+        reg="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})$"
         if serializer.is_valid():
+            pat = re.compile(reg)      
+            match = re.search(pat, serializer.validated_data['password'])      
+            if not match:
+                return response.Response({"password_error": "password Not strong"}, status=status.HTTP_400_BAD_REQUEST)
+
+            else:
+                print("Password invalid !!")            
             if serializer.validated_data['confirm_password'] == serializer.validated_data['password']:
                 serializer.save()
                 user_data = serializer.data
