@@ -132,11 +132,6 @@ class ProjectsTags(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ProjectsCategoris(serializers.ModelSerializer):
-    class Meta:
-        model = Projects
-        fields = '__all__'
-
 
 class ProjectsSearchBarTitle(serializers.ModelSerializer):
     class Meta:
