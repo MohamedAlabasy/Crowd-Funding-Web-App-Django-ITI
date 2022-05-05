@@ -5,13 +5,15 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.core.validators import RegexValidator
 
-# Create your models here.
+# Create your models here. ?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,}
 
 
 class User(models.Model):
-    # main Data
-    first_name = models.CharField(max_length=150, blank=False)
-    last_name = models.CharField(max_length=150, blank=False)
+    # main Data  
+    first_name = models.CharField(max_length=150, blank=False, validators=[
+                                    RegexValidator(r'^[A-Za-z]+$')])
+    last_name = models.CharField(max_length=150, blank=False, validators=[
+                                    RegexValidator(r'^[A-Za-z]+$')])
     password = models.CharField(max_length=150, blank=False)
     mobile_phone = models.CharField(blank=False, max_length=11, validators=[
                                     RegexValidator(r'^01[0-2,5]{1}[0-9]{8}$')])
