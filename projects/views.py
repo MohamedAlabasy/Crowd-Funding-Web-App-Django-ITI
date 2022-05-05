@@ -12,20 +12,37 @@ from .models import Projects, Categories, Tags, Rates, Pictures
 # @authentication_classes([jwt.JWTAuthentication])
 # @permission_classes([IsAuthenticated])
 def add_project_images(request):
-    # print(request.FILES.getlist('image'))
-    serializer = ProjectsPictures(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        serializer = ({
-            "status": 1,
-            "message": "pictures added successfully",
-            "date": serializer.data
-        })
-        return Response(serializer, status=status.HTTP_201_CREATED)
+    images = request.FILES.getlist('image')
+    if images:
+        for image in images:
+            data = ({
+                "project": 1,
+                "image": image
+            })
+            serializer = ProjectsPictures(data=data)
+
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                serializer = ({
+                    "status": 0,
+                    "errors": serializer.errors
+                })
+                return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+        else:
+            serializer = ({
+                "status": 1,
+                "message": "pictures added successfully",
+                # "date": serializer.data
+            })
+            return Response(serializer, status=status.HTTP_201_CREATED)
+
     else:
         serializer = ({
             "status": 0,
-            "errors": serializer.errors
+            "errors": {
+                "image": "This field is required"
+            }
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
@@ -34,7 +51,20 @@ def add_project_images(request):
 # @authentication_classes([jwt.JWTAuthentication])
 # @permission_classes([IsAuthenticated])
 def create_project(request):
-    serializer = createProjects(data=request.data)
+    print(request.data)
+    data = ({
+        "title": request.data['title'],
+        "details": request.data['details'],
+        "rate": 0,
+        "current_donation": 0,
+        "total_target": request.data['total_target'],
+        "end_campaign": request.data['end_campaign'],
+        "category": request.data['category'],
+        "owner": request.data['owner'],
+        "tag": request.data['tag']
+    })
+    request.data["rate"] = 0
+    serializer = createProjects(data=data)
     if serializer.is_valid():
         serializer.save()
         serializer = ({
