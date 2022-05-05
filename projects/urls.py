@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import search_bar_tag ,search_bar_title ,project_category, all_project, add_project_images, project_pictures, get_all_tags, donate_project, get_latest_projects, show_project, show_similar_project, create_project, create_comment, reply_comment, report_project, rate_project, cancel_project, all_categories
+from .views import highest_rate,search_bar_tag ,search_bar_title ,project_category, all_project, add_project_images, project_pictures, get_all_tags, donate_project, get_latest_projects, show_project, show_similar_project, create_project, create_comment, reply_comment, report_project, rate_project, cancel_project, all_categories
 
 #=======================================================================================#
 #			                                URLS                                     	#
@@ -24,4 +24,5 @@ urlpatterns = [
     path('category/<int:category_id>', project_category),
     path('search/<str:project_title>', search_bar_title),
     path('search/<str:project_tag>', search_bar_tag),
+    path('highestRate', highest_rate),
 ]

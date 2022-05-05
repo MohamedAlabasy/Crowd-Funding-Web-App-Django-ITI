@@ -3,6 +3,8 @@ from crowd_funding.settings import SECRET_KEY
 import jwt
 from datetime import datetime, timedelta
 from django.conf import settings
+from django.core.validators import RegexValidator
+
 # Create your models here.
 
 
@@ -11,7 +13,7 @@ class User(models.Model):
     first_name = models.CharField(max_length=150, blank=False)
     last_name = models.CharField(max_length=150, blank=False)
     password = models.CharField(max_length=150, blank=False)
-    mobile_phone = models.CharField( max_length=150, blank=False)
+    mobile_phone = models.CharField( blank=False,max_length=11, validators=[RegexValidator(r'^01[0-2,5]{1}[0-9]{8}$')])
     email = models.EmailField( blank=False,unique=True)
     profile_image = models.ImageField (max_length=255, upload_to="img/%y",null=True,blank=True)
     ##additonal Data
