@@ -536,7 +536,7 @@ def search_bar_tag(request, project_tag):
 def highest_rate(request):
     
     try:
-        query = Projects.objects.all().order_by('rate')[:5]
+        query = Project.objects.all().order_by('rate')[:5]
         serializer = getProjects(query,many=True).data
         serializer = ({
             "status": 1,
