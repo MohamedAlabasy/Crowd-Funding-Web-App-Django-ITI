@@ -544,7 +544,6 @@ def project_category(request, category_id):
 
 @api_view(['GET'])
 def search_bar_title(request, project_title):
-    print(project_title)
     try:
         query = Projects.objects.get(title=project_title)
         serializer = getProjects(query).data
@@ -565,17 +564,16 @@ def search_bar_title(request, project_title):
 
 @api_view(['GET'])
 def search_bar_tag(request, project_tag):
-    print(project_tag)
     try:
-        query = Tags.objects.get(name=project_tag)
-        serializer = ProjectsSearchBarTags(query).data
+        query = Tags.objects.filter(tag=project_tag).all()
+        serializer = ProjectsSearchBarTags(query, many=True).data
         serializer = ({
             "status": 1,
+            'count': len(serializer),
             "data": serializer,
         })
         return Response(serializer, status=status.HTTP_200_OK)
     except:
-
         serializer = (
             {
                 "status": 0,
