@@ -10,6 +10,7 @@ from projects.serializers import getCategories, getTags, getProjects
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         max_length=128, min_length=8, write_only=True)
+    
     confirm_password = serializers.CharField(
         max_length=128, min_length=8, write_only=True)
 
