@@ -229,7 +229,7 @@ def show_similar_project(request, project_id):
 @api_view(['GET'])
 def show_project(request, project_id):
     try:
-        query = Projects.objects.get(id=project_id)
+        query = Projects.objects.prefetch_related('images').get(id=project_id)
         serializer = getProjects(query).data
         serializer = ({
             "status": 1,
