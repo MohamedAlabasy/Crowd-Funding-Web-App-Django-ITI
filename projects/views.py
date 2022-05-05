@@ -4,7 +4,7 @@ from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
 from user import myjwt
-from .serializers import ProjectsSearchBar, ProjectsCategoris, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
+from .serializers import ProjectsSearchBarTags, ProjectsSearchBarTitle, ProjectsCategoris, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
 from .models import Projects, Categories, Tags, Rates, Pictures
 
 
@@ -466,11 +466,11 @@ def project_category(request, category_id):
 
 
 @api_view(['GET'])
-def search_bar(request, project_title):
+def search_bar_title(request, project_title):
     print(project_title)
     try:
         query = Projects.objects.get(title=project_title)
-        serializer = ProjectsSearchBar(query).data
+        serializer = ProjectsSearchBarTitle(query).data
         serializer = ({
             "status": 1,
             "data": serializer,
@@ -485,4 +485,24 @@ def search_bar(request, project_title):
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
+
+@api_view(['GET'])
+def search_bar_tag(request, project_tag):
+    print(project_tag)
+    try:
+        query = Tags.objects.get(name=project_tag)
+        serializer = ProjectsSearchBarTags(query).data
+        serializer = ({
+            "status": 1,
+            "data": serializer,
+    })
+        return Response(serializer, status=status.HTTP_200_OK)
+    except:
+
+        serializer = (
+            {
+                "status": 0,
+                "message": f"There is no projects match with this tag = {project_tag}",
+            })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
     

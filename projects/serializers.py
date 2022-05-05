@@ -98,8 +98,12 @@ class ProjectsCategoris(serializers.ModelSerializer):
         model = Projects
         fields = '__all__'
 
-class ProjectsSearchBar(serializers.ModelSerializer):
+class ProjectsSearchBarTitle(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = '__all__'
         
+class ProjectsSearchBarTags(serializers.ModelSerializer):
+    class Meta:
+        model = Projects
+        fields = '__all__'
