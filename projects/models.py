@@ -15,18 +15,6 @@ class Categories(models.Model):
         return self.name
 
 #=======================================================================================#
-#			                              Tags                                         	#
-#=======================================================================================#
-
-
-class Tags(models.Model):
-    name = models.CharField(max_length=250, unique=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
-#=======================================================================================#
 #			                            Project                                     	#
 #=======================================================================================#
 
@@ -43,7 +31,6 @@ class Projects(models.Model):
     selected_at_by_admin = models.DateTimeField(default=timezone.now)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     owner = models.ForeignKey(User,  on_delete=models.CASCADE)
-    tag = models.ManyToManyField(Tags)
 
     def __str__(self):
         return self.title
@@ -61,6 +48,18 @@ class Pictures(models.Model):
     def __str__(self):
         return f"/media/{self.image}"
 
+#=======================================================================================#
+#			                              Tags                                         	#
+#=======================================================================================#
+
+
+class Tags(models.Model):
+    tag = models.CharField(max_length=250)
+    project = models.ForeignKey(
+        Projects, on_delete=models.CASCADE, related_name='tags')
+
+    def __str__(self):
+        return self.tag
 #=======================================================================================#
 #			                            comments                                     	#
 #=======================================================================================#
@@ -88,25 +87,30 @@ class Replies(models.Model):
         return (f"{self.user.first_name} {self.user.last_name} on Commint id = {self.comment.id}")
 
 #=======================================================================================#
-#			                            Reports                                     	#
+#			                            ReportsProject                                  #
 #=======================================================================================#
 
 
-class Reports(models.Model):
-    reason = models.TextField()
+class ReportsProject(models.Model):
+    reason = models.TextField(blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    project = models.ForeignKey(Projects, on_delete=models.CASCADE, blank=True)
-    comment = models.ForeignKey(Comments, on_delete=models.CASCADE, blank=True)
-    replie = models.ForeignKey(Replies, on_delete=models.CASCADE, blank=True)
+    project = models.ForeignKey(Projects, on_delete=models.CASCADE)
 
     def __str__(self):
-        if self.project.title:
-            result = f" {self.user.first_name} {self.user.last_name} on project {self.project.title} "
-        elif self.comment.id:
-            result = f" {self.user.first_name} {self.user.last_name} on comment id = {self.comment.id} "
-        elif self.replie.id:
-            result = f" {self.user.first_name} {self.user.last_name} on replie id = {self.replie.id} "
-        return result
+        return f" {self.user.first_name} {self.user.last_name} on report {self.project.title} "
+
+#=======================================================================================#
+#			                            ReportsComment                                 	#
+#=======================================================================================#
+
+
+class ReportsComment(models.Model):
+    reason = models.TextField(blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comments, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name} on report id = {self.comment.id}"
 
 #=======================================================================================#
 #			                            Donations                                     	#
