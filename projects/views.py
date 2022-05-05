@@ -4,7 +4,7 @@ from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
 from user import myjwt
-from .serializers import ProjectsTags, ProjectsSearchBarTags, ProjectsSearchBarTitle, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, ReportsComment, updateRateProjects, RateProjects, getProjects
+from .serializers import ProjectsTags, ProjectsSearchBarTags, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, ReportsComment, updateRateProjects, RateProjects, getProjects
 from .models import Projects, Categories, Tags, Rates, Pictures
 
 
@@ -547,7 +547,7 @@ def search_bar_title(request, project_title):
     print(project_title)
     try:
         query = Projects.objects.get(title=project_title)
-        serializer = ProjectsSearchBarTitle(query).data
+        serializer = getProjects(query).data
         serializer = ({
             "status": 1,
             "data": serializer,
