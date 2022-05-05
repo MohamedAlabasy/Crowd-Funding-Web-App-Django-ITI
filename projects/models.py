@@ -54,11 +54,12 @@ class Projects(models.Model):
 
 
 class Pictures(models.Model):
-    image = models.ImageField(max_length=255, upload_to="img/%y", null=True)
-    project = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    image = models.ImageField(max_length=255, upload_to="img/%y")
+    project = models.ForeignKey(
+        Projects, on_delete=models.CASCADE, related_name='images')
 
     def __str__(self):
-        return self.project.title
+        return f"/media/{self.image}"
 
 #=======================================================================================#
 #			                            comments                                     	#

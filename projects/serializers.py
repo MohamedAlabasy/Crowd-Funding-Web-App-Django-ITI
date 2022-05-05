@@ -25,10 +25,27 @@ class getProjects(serializers.ModelSerializer):
     category = getCategories(read_only=True)
     tag = getTags(many=True, read_only=True)
     owner = getUser(read_only=True)
+    images = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Projects
-        fields = "__all__"
+
+        fields = (
+            "id",
+            "title",
+            "details",
+            "rate",
+            "total_target",
+            "current_donation",
+            "start_campaign",
+            "end_campaign",
+            "created_at",
+            "selected_at_by_admin",
+            "images",
+            "category",
+            "owner",
+            "tag"
+        )
 
 
 class getSingleProject(serializers.ModelSerializer):
@@ -43,7 +60,18 @@ class getSingleProject(serializers.ModelSerializer):
 class createProjects(serializers.ModelSerializer):
     class Meta:
         model = Projects
-        fields = "__all__"
+        # fields = "__all__"
+        fields = (
+            "title",
+            "details",
+            "rate",
+            "current_donation",
+            "total_target",
+            "end_campaign",
+            "category",
+            "owner",
+            "tag",
+        )
 
 
 class createComment(serializers.ModelSerializer):
@@ -93,13 +121,18 @@ class ProjectsPictures(serializers.ModelSerializer):
         model = Pictures
         fields = '__all__'
 
+
 class ProjectsCategoris(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = '__all__'
 
-class ProjectsSearchBar(serializers.ModelSerializer):
+class ProjectsSearchBarTitle(serializers.ModelSerializer):
     class Meta:
         model = Projects
         fields = '__all__'
         
+class ProjectsSearchBarTags(serializers.ModelSerializer):
+    class Meta:
+        model = Projects
+        fields = '__all__'
