@@ -60,7 +60,18 @@ class getSingleProject(serializers.ModelSerializer):
 class createProjects(serializers.ModelSerializer):
     class Meta:
         model = Projects
-        fields = "__all__"
+        # fields = "__all__"
+        fields = (
+            "title",
+            "details",
+            "rate",
+            "current_donation",
+            "total_target",
+            "end_campaign",
+            "category",
+            "owner",
+            "tag",
+        )
 
 
 class createComment(serializers.ModelSerializer):
