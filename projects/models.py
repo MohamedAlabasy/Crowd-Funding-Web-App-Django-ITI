@@ -15,18 +15,6 @@ class Categories(models.Model):
         return self.name
 
 #=======================================================================================#
-#			                              Tags                                         	#
-#=======================================================================================#
-
-
-class Tags(models.Model):
-    name = models.CharField(max_length=250, unique=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
-#=======================================================================================#
 #			                            Project                                     	#
 #=======================================================================================#
 
@@ -43,7 +31,6 @@ class Projects(models.Model):
     selected_at_by_admin = models.DateTimeField(default=timezone.now)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     owner = models.ForeignKey(User,  on_delete=models.CASCADE)
-    tag = models.ManyToManyField(Tags)
 
     def __str__(self):
         return self.title
@@ -61,6 +48,18 @@ class Pictures(models.Model):
     def __str__(self):
         return f"/media/{self.image}"
 
+#=======================================================================================#
+#			                              Tags                                         	#
+#=======================================================================================#
+
+
+class Tags(models.Model):
+    tag = models.CharField(max_length=250)
+    project = models.ForeignKey(
+        Projects, on_delete=models.CASCADE, related_name='tags')
+
+    def __str__(self):
+        return self.tag
 #=======================================================================================#
 #			                            comments                                     	#
 #=======================================================================================#

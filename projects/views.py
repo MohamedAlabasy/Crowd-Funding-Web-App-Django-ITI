@@ -4,19 +4,17 @@ from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
 from user import myjwt
-from .serializers import ProjectsSearchBarTags, ProjectsSearchBarTitle, ProjectsCategoris, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
+from .serializers import ProjectsTags, ProjectsSearchBarTags, ProjectsSearchBarTitle, ProjectsCategoris, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
 from .models import Projects, Categories, Tags, Rates, Pictures
 
 
 def add_project_images(images, project_id):
-    print(images, project_id)
     for image in images:
         data = ({
             "project": project_id,
             "image": image
         })
         serializer = ProjectsPictures(data=data)
-
         if serializer.is_valid():
             serializer.save()
         else:
@@ -33,6 +31,30 @@ def add_project_images(images, project_id):
         return Response(serializer, status=status.HTTP_201_CREATED)
 
 
+def add_project_tags(tags, project_id):
+    print(tags)
+    for tag in tags:
+        data = ({
+            "project": project_id,
+            "tag": tag,
+        })
+        serializer = ProjectsTags(data=data)
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            serializer = ({
+                "status": 0,
+                "errors": serializer.errors
+            })
+            return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+    else:
+        serializer = ({
+            "status": 1,
+            "message": "tag added successfully",
+        })
+        return Response(serializer, status=status.HTTP_201_CREATED)
+
+
 @api_view(['POST'])
 # @authentication_classes([jwt.JWTAuthentication])
 # @permission_classes([IsAuthenticated])
@@ -41,10 +63,20 @@ def create_project(request):
         serializer = ({
             "status": 0,
             "errors": {
-                "image": "This field is required"
+                "images": "This field is required"
             }
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+    if not request.POST.getlist('tags'):
+        serializer = ({
+            "status": 0,
+            "errors": {
+                "tags": "This field is required"
+            }
+        })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
     data = ({
         "title": request.data['title'],
         "details": request.data['details'],
@@ -54,15 +86,13 @@ def create_project(request):
         "end_campaign": request.data['end_campaign'],
         "category": request.data['category'],
         "owner": request.data['owner'],
-        # "tag": request.data['tag']
-        "tag": [1]
     })
-    request.data["rate"] = 0
     serializer = createProjects(data=data)
     if serializer.is_valid():
         ob = serializer.save()
         print(ob.id)
         add_project_images(request.FILES.getlist('images'), ob.id)
+        add_project_tags(request.POST.getlist('tags'), ob.id)
         serializer = ({
             "status": 1,
             "message": "Project created successfully",
