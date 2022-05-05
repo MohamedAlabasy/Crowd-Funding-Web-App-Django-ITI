@@ -11,6 +11,28 @@ from .models import Projects, Categories, Tags, Rates, Pictures
 @api_view(['POST'])
 # @authentication_classes([jwt.JWTAuthentication])
 # @permission_classes([IsAuthenticated])
+def add_project_images(request):
+    # print(request.FILES.getlist('image'))
+    serializer = ProjectsPictures(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        serializer = ({
+            "status": 1,
+            "message": "pictures added successfully",
+            "date": serializer.data
+        })
+        return Response(serializer, status=status.HTTP_201_CREATED)
+    else:
+        serializer = ({
+            "status": 0,
+            "errors": serializer.errors
+        })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+# @authentication_classes([jwt.JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def create_project(request):
     serializer = createProjects(data=request.data)
     if serializer.is_valid():
@@ -229,7 +251,7 @@ def show_similar_project(request, project_id):
 @api_view(['GET'])
 def show_project(request, project_id):
     try:
-        query = Projects.objects.get(id=project_id)
+        query = Projects.objects.prefetch_related('images').get(id=project_id)
         serializer = getProjects(query).data
         serializer = ({
             "status": 1,
@@ -422,28 +444,6 @@ def all_project(request):
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['POST'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
-def add_project_images(request):
-    # print(request.FILES.getlist('image'))
-    serializer = ProjectsPictures(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        serializer = ({
-            "status": 1,
-            "message": "pictures added successfully",
-            "date": serializer.data
-        })
-        return Response(serializer, status=status.HTTP_201_CREATED)
-    else:
-        serializer = ({
-            "status": 0,
-            "errors": serializer.errors
-        })
-        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
-
-
 @api_view(['GET'])
 def project_category(request, category_id):
     try:
@@ -474,7 +474,7 @@ def search_bar_title(request, project_title):
         serializer = ({
             "status": 1,
             "data": serializer,
-    })
+        })
         return Response(serializer, status=status.HTTP_200_OK)
     except:
 
@@ -484,7 +484,6 @@ def search_bar_title(request, project_title):
                 "message": f"There is no match with this title = {project_title}",
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
-
 
 @api_view(['GET'])
 def search_bar_tag(request, project_tag):
@@ -506,3 +505,4 @@ def search_bar_tag(request, project_tag):
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
     
+
