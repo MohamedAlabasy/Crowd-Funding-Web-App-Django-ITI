@@ -295,34 +295,34 @@ def get_all_tags(request):
     return Response(serializer)
 
 
-@api_view(['GET'])
+# @api_view(['GET'])
 # @authentication_classes([jwt.JWTAuthentication])
 # @permission_classes([IsAuthenticated])
-def show_similar_project(request, project_id):
-    try:
-        query = Projects.objects.get(id=project_id)
-        serializer = getSingleProject(query).data
+# def show_similar_project(request, project_title):
+#     try:
+#         query = Projects.objects.get(tag=project_title)
+#         serializer = getSingleProject(query).data
 
-        query_similar_project = Projects.objects.filter(
-            tag=serializer['tag'][0]).all()[:4]
-        serializer_similar_project = getSingleProject(
-            query_similar_project, many=True).data
-        serializer = ({
-            "status": 1,
-            "similar_project_count": len(serializer_similar_project),
-            "project": serializer,
-            'similar_project': serializer_similar_project,
-        })
-        return Response(serializer, status=status.HTTP_200_OK)
-    except:
+#         query_similar_project = Projects.objects.filter(
+#             tag=serializer['tag'][0]).all()[:4]
+#         serializer_similar_project = getSingleProject(
+#             query_similar_project, many=True).data
+#         serializer = ({
+#             "status": 1,
+#             "similar_project_count": len(serializer_similar_project),
+#             "project": serializer,
+#             'similar_project': serializer_similar_project,
+#         })
+#         return Response(serializer, status=status.HTTP_200_OK)
+#     except:
 
-        serializer = ([
-            {
-                "status": 0,
-                "message": f"There is no tags with this id = {project_id}",
-            }
-        ])
-    return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+#         serializer = ([
+#             {
+#                 "status": 0,
+#                 "message": f"There is no tags with this id = {project_id}",
+#             }
+#         ])
+#     return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
@@ -544,7 +544,6 @@ def project_category(request, category_id):
 
 @api_view(['GET'])
 def search_bar_title(request, project_title):
-    print(project_title)
     try:
         query = Projects.objects.get(title=project_title)
         serializer = getProjects(query).data
@@ -565,17 +564,16 @@ def search_bar_title(request, project_title):
 
 @api_view(['GET'])
 def search_bar_tag(request, project_tag):
-    print(project_tag)
     try:
-        query = Tags.objects.get(name=project_tag)
-        serializer = ProjectsSearchBarTags(query).data
+        query = Tags.objects.filter(tag=project_tag).all()
+        serializer = ProjectsSearchBarTags(query, many=True).data
         serializer = ({
             "status": 1,
+            'count': len(serializer),
             "data": serializer,
         })
         return Response(serializer, status=status.HTTP_200_OK)
     except:
-
         serializer = (
             {
                 "status": 0,
