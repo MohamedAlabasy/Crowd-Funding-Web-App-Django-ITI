@@ -4,7 +4,7 @@ from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
 from user import myjwt
-from .serializers import ProjectsCategoris, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
+from .serializers import ProjectsSearchBar, ProjectsCategoris, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, updateRateProjects, RateProjects, getProjects
 from .models import Projects, Categories, Tags, Rates, Pictures
 
 
@@ -463,3 +463,26 @@ def project_category(request, category_id):
                 "message": f"There is no category with this id = {project_id}",
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def search_bar(request, project_title):
+    print(project_title)
+    try:
+        query = Projects.objects.get(title=project_title)
+        serializer = ProjectsSearchBar(query).data
+        serializer = ({
+            "status": 1,
+            "data": serializer,
+    })
+        return Response(serializer, status=status.HTTP_200_OK)
+    except:
+
+        serializer = (
+            {
+                "status": 0,
+                "message": f"There is no match with this title = {project_title}",
+            })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+    
