@@ -64,10 +64,10 @@ class verifyEmail(views.APIView):
            if not user.is_verifications:
              user.is_verifications=True
              user.save()
-             return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000/user/login')
+             return HttpResponseRedirect(redirect_to='http://localhost:4200/login')
              
            else:
-             return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000/user/login')
+             return HttpResponseRedirect(redirect_to='http://localhost:4200/login')
              
 
 
