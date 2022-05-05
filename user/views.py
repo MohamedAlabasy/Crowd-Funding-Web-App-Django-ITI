@@ -19,6 +19,8 @@ from user import myjwt
 from django.conf import settings
 import jwt
 from user import serializer
+from django.http import HttpResponseRedirect
+
 
 
 # Create your views here.
@@ -61,8 +63,12 @@ class verifyEmail(views.APIView):
            user=User.objects.get(id=payload['user_id'])
            if not user.is_verifications:
              user.is_verifications=True
-             user.save();
-           return response.Response({'email'':''successfully activated'}, status=status.HTTP_200_OK)
+             user.save()
+             return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000/user/login')
+             
+           else:
+             return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000/user/login')
+             
 
 
         except jwt.ExpiredSignatureError as identifier:
