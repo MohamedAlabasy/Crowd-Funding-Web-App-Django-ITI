@@ -586,20 +586,19 @@ def search_bar_tag(request, project_tag):
 
 @api_view(['GET'])
 def highest_rate(request):
-
     try:
-        query = Project.objects.all().order_by('rate')[:5]
+        query = Projects.objects.all().order_by('rate').reverse()[:5]
         serializer = getProjects(query, many=True).data
         serializer = ({
             "status": 1,
+            'count': len(serializer),
             "data": serializer,
         })
         return Response(serializer, status=status.HTTP_200_OK)
     except:
-
         serializer = (
             {
                 "status": 0,
-                "message": f"There is no rate match with this hightest rate projects ",
+                "message": "There is no rate match with this hightest rate projects"
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)

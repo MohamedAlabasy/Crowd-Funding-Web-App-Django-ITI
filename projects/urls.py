@@ -23,8 +23,8 @@ urlpatterns = [
     # path('pictures/<int:project_id>', project_pictures),
     path('add/images', add_project_images),
     path('category/<int:category_id>', project_category),
-    path('highestRate', highest_rate),
 
+    path('highestRate', highest_rate),
     path('search/title/<str:project_title>', search_bar_title),
     path('search/tag/<str:project_tag>', search_bar_tag),
 ]
