@@ -8,7 +8,27 @@ from .serializers import ProjectsTags, ProjectsSearchBarTags, ProjectsPictures, 
 from .models import Projects, Categories, Tags, Rates, Pictures
 
 
-
+def add_project_images(images, project_id):
+    for image in images:
+        data = ({
+            "project": project_id,
+            "image": image
+        })
+        serializer = ProjectsPictures(data=data)
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            serializer = ({
+                "status": 0,
+                "errors": serializer.errors
+            })
+            return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+    else:
+        serializer = ({
+            "status": 1,
+            "message": "pictures added successfully",
+        })
+        return Response(serializer, status=status.HTTP_201_CREATED)
 
 
 def add_project_tags(tags, project_id):
