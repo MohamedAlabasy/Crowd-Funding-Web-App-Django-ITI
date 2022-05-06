@@ -31,7 +31,28 @@ def add_project_images(images, project_id):
         return Response(serializer, status=status.HTTP_201_CREATED)
 
 
-
+def add_project_tags(tags, project_id):
+    print(tags)
+    for tag in tags:
+        data = ({
+            "project": project_id,
+            "tag": tag,
+        })
+        serializer = ProjectsTags(data=data)
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            serializer = ({
+                "status": 0,
+                "errors": serializer.errors
+            })
+            return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+    else:
+        serializer = ({
+            "status": 1,
+            "message": "tag added successfully",
+        })
+        return Response(serializer, status=status.HTTP_201_CREATED)
 
 
 @api_view(['POST'])
