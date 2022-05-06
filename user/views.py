@@ -33,15 +33,7 @@ class RegisterApiView(GenericAPIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        # reg="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})$"
         if serializer.is_valid():
-            # pat = re.compile(reg)      
-            # match = re.search(pat, serializer.validated_data['password'])      
-            # if not match:
-                # return response.Response({"password_error": "password Not strong"}, status=status.HTTP_400_BAD_REQUEST)
-
-            # else:
-                # print("Password invalid !!")            
             if serializer.validated_data['confirm_password'] == serializer.validated_data['password']:
                 serializer.save()
                 user_data = serializer.data
@@ -56,10 +48,16 @@ class RegisterApiView(GenericAPIView):
                 data = {'email_body': email_body, 'to_email': user.email,
                         'email_subject': 'Verify your email'}
                 Util.send_email(data)
-                return response.Response(serializer.data, status=status.HTTP_201_CREATED)
-            return response.Response({"password_error": "password must match"}, status=status.HTTP_400_BAD_REQUEST)
+                return response.Response({'data':serializer.data,
+                'status': 1
+                }, status=status.HTTP_201_CREATED)
+            return response.Response({"message_error": "password must match",
+            'status': 0
+            }, status=status.HTTP_400_BAD_REQUEST)
 
-        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return response.Response({'message_error': serializer.errors,
+        'status': 0
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 
 ############## Activate Email #################
@@ -82,14 +80,19 @@ class verifyEmail(views.APIView):
 
 
         except jwt.ExpiredSignatureError as identifier:
-                return response.Response({'error'':''ACTIVATION LINK EXPIRED'}, status=status.HTTP_400_BAD_REQUEST)
+                return response.Response({'message_error':'ACTIVATION LINK EXPIRED',
+                'status': 0
+                }, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError as identifier:
-                return response.Response({'error'':''invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+                return response.Response({'message_error':'invalid token', 
+                'status':0
+                
+                }, status=status.HTTP_400_BAD_REQUEST)
 
 
 ##############  Login Api #################
 class LoginApiView(GenericAPIView):
-    serializer_class = LoginSerializer
+    serializer_class = LoginSerializer ##
 
     def post(self, request):
         email = request.data.get('email', None)
@@ -107,19 +110,28 @@ class LoginApiView(GenericAPIView):
                 except User.DoesNotExist:
                     user = None
                 if not is_verified2[0]:
-                    return response.Response({'message': "please verify your email"}, status=status.HTTP_401_UNAUTHORIZED)
+                    return response.Response({'message_error': "please verify your email",
+                    'status': 0
+                    
+                    }, status=status.HTTP_401_UNAUTHORIZED)
 
                 if user:
                     serializer = self.serializer_class(user)
                     User.objects.filter(email=email).update(
                         is_authenticated=True)
 
-                    return response.Response(serializer.data, status=status.HTTP_200_OK)
+                    return response.Response({'data':serializer.data,
+                    'status': 1
+                    }, status=status.HTTP_200_OK)
 
         except:
             password = None
 
-        return response.Response({'message': "invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        return response.Response({'message_error': "invalid credentials",
+        'status': 0
+        
+        
+        }, status=status.HTTP_401_UNAUTHORIZED)
 
 #=======================================================================================#
 #			                          view user profile                                	#
