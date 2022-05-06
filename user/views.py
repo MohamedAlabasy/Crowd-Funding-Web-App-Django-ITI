@@ -31,6 +31,9 @@ class RegisterApiView(GenericAPIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
+        # my_array=serializer.errors.values();
+        # new_array= ','.join(my_array)
+
         if serializer.is_valid():
             if serializer.validated_data['confirm_password'] == serializer.validated_data['password']:
                 serializer.save()
@@ -53,7 +56,7 @@ class RegisterApiView(GenericAPIView):
                                       'status': 0
                                       }, status=status.HTTP_400_BAD_REQUEST)
         
-        return response.Response({'message_error':serializer.errors.values(), 'status':0
+        return response.Response({'message_error':serializer.errors, 'status':0
                                   }, status=status.HTTP_400_BAD_REQUEST)
         
 
