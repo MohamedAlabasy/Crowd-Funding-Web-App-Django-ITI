@@ -36,7 +36,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         password = attrs.get('password','')
         match = re.fullmatch( "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,18}$",password)   
         if not match:
-            raise serializers.ValidationError({'message_error':'The password should be 8 length and at least one upper case, one lower case, one special character and one digit'})
+            raise serializers.ValidationError({'password':'The password should be 8 length and at least one upper case, one lower case, one special character and one digit'})
         return attrs
     def create(self, validated_data):
         return User.objects.create(
