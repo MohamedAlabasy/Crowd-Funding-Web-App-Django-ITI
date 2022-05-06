@@ -1,8 +1,8 @@
 from ntpath import realpath
 from django.views import View
 from rest_framework.generics import GenericAPIView
-from rest_framework import response, status, generics, permissions,views
-from .serializer import LoginSerializer, updateProfile, RegisterSerializer, getUserProfile, getUserProjects, getUserDonations, updateProfile,EmailVerificationSerializer
+from rest_framework import response, status, generics, permissions, views
+from .serializer import LoginSerializer, updateProfile, RegisterSerializer, getUserProfile, getUserProjects, getUserDonations, updateProfile, EmailVerificationSerializer
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
@@ -23,8 +23,6 @@ from django.http import HttpResponseRedirect
 import re
 
 
-
-
 # Create your views here.
 
 ############### Register api #################
@@ -33,15 +31,7 @@ class RegisterApiView(GenericAPIView):
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
-        # reg="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})$"
         if serializer.is_valid():
-            # pat = re.compile(reg)      
-            # match = re.search(pat, serializer.validated_data['password'])      
-            # if not match:
-                # return response.Response({"password_error": "password Not strong"}, status=status.HTTP_400_BAD_REQUEST)
-
-            # else:
-                # print("Password invalid !!")            
             if serializer.validated_data['confirm_password'] == serializer.validated_data['password']:
                 serializer.save()
                 user_data = serializer.data
@@ -56,35 +46,47 @@ class RegisterApiView(GenericAPIView):
                 data = {'email_body': email_body, 'to_email': user.email,
                         'email_subject': 'Verify your email'}
                 Util.send_email(data)
-                return response.Response(serializer.data, status=status.HTTP_201_CREATED)
-            return response.Response({"password_error": "password must match"}, status=status.HTTP_400_BAD_REQUEST)
+                return response.Response({'first_name': serializer.data['first_name'], 'last_name': serializer.data['last_name'], 'mobile_phone': serializer.data['mobile_phone'], 'email': serializer.data['email'], 'profile_image': serializer.data['profile_image'],
+                                          'status': 1
+                                          }, status=status.HTTP_201_CREATED)
+            return response.Response({"message_error": "password must match",
+                                      'status': 0
+                                      }, status=status.HTTP_400_BAD_REQUEST)
+        
+        return response.Response({'message_error':serializer.errors.values(), 'status':0
+                                  }, status=status.HTTP_400_BAD_REQUEST)
+        
 
-        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                                  
 
 
 ############## Activate Email #################
 class verifyEmail(views.APIView):
-    serializer_class=EmailVerificationSerializer
-    def get(self,request):
-        token=request.GET.get('token')
-        try:
-           payload=jwt.decode(token,settings.SECRET_KEY )
-           print(payload)
-           user=User.objects.get(id=payload['user_id'])
-           if not user.is_verifications:
-             user.is_verifications=True
-             user.save()
-             return HttpResponseRedirect(redirect_to='http://localhost:4200/login')
-             
-           else:
-             return HttpResponseRedirect(redirect_to='http://localhost:4200/login')
-             
+    serializer_class = EmailVerificationSerializer
 
+    def get(self, request):
+        token = request.GET.get('token')
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY)
+            print(payload)
+            user = User.objects.get(id=payload['user_id'])
+            if not user.is_verifications:
+                user.is_verifications = True
+                user.save()
+                return HttpResponseRedirect(redirect_to='http://localhost:4200/login')
+
+            else:
+                return HttpResponseRedirect(redirect_to='http://localhost:4200/login')
 
         except jwt.ExpiredSignatureError as identifier:
-                return response.Response({'error'':''ACTIVATION LINK EXPIRED'}, status=status.HTTP_400_BAD_REQUEST)
+            return response.Response({'message_error': 'ACTIVATION LINK EXPIRED',
+                                      'status': 0
+                                      }, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError as identifier:
-                return response.Response({'error'':''invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+            return response.Response({'message_error': 'invalid token',
+                                      'status': 0
+
+                                      }, status=status.HTTP_400_BAD_REQUEST)
 
 
 ##############  Login Api #################
@@ -107,19 +109,28 @@ class LoginApiView(GenericAPIView):
                 except User.DoesNotExist:
                     user = None
                 if not is_verified2[0]:
-                    return response.Response({'message': "please verify your email"}, status=status.HTTP_401_UNAUTHORIZED)
+                    return response.Response({'message_error': "please verify your email",
+                                              'status': 0
+
+                                              }, status=status.HTTP_401_UNAUTHORIZED)
 
                 if user:
                     serializer = self.serializer_class(user)
                     User.objects.filter(email=email).update(
                         is_authenticated=True)
 
-                    return response.Response(serializer.data, status=status.HTTP_200_OK)
+                    return response.Response({'data': serializer.data,
+                                              'status': 1
+                                              }, status=status.HTTP_200_OK)
 
         except:
             password = None
 
-        return response.Response({'message': "invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        return response.Response({'message_error': "invalid credentials",
+                                  'status': 0
+
+
+                                  }, status=status.HTTP_401_UNAUTHORIZED)
 
 #=======================================================================================#
 #			                          view user profile                                	#
