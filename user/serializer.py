@@ -35,17 +35,19 @@ class LoginSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = User
-        fields = ('email', 'password','id','token','first_name','last_name','mobile_phone','email','profile_image','country','Birth_date','facebook_profile','is_verifications')
-        read_only_fields = ['token','id','first_name','last_name','mobile_phone','profile_image','country','Birth_date','facebook_profile','is_verifications']
+        fields = ('email', 'password', 'id', 'token', 'first_name', 'last_name', 'mobile_phone',
+                  'email', 'profile_image', 'country', 'Birth_date', 'facebook_profile', 'is_verifications')
+        read_only_fields = ['token', 'id', 'first_name', 'last_name', 'mobile_phone',
+                            'profile_image', 'country', 'Birth_date', 'facebook_profile', 'is_verifications']
 
 
 ###########Email Verify ##################
 class EmailVerificationSerializer(serializers.ModelSerializer):
-    token=serializers.CharField( max_length=555)
+    token = serializers.CharField(max_length=555)
 
     class Meta():
-        model=User
-        fields=['token']
+        model = User
+        fields = ['token']
 
 
 #=======================================================================================#
@@ -78,25 +80,28 @@ class getUserProfile(serializers.ModelSerializer):
 class getUserProjects(serializers.ModelSerializer):
     owner = getUserProfile(read_only=True)
     category = getCategories(read_only=True)
-    tag = getTags(many=True, read_only=True)
+    tags = serializers.StringRelatedField(many=True)
+    images = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Projects
 
-        fields = [
-            'id',
-            'title',
-            'details',
-            'rate',
-            'total_target',
-            'current_donation',
-            'start_campaign',
-            'end_campaign',
-            'created_at',
-            'category',
-            'owner',
-            'tag',
-        ]
+        fields = (
+            "id",
+            "title",
+            "details",
+            "rate",
+            "total_target",
+            "current_donation",
+            "start_campaign",
+            "end_campaign",
+            "created_at",
+            "selected_at_by_admin",
+            "images",
+            "category",
+            "owner",
+            "tags"
+        )
 
 
 #=======================================================================================#

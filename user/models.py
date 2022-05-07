@@ -3,29 +3,36 @@ from crowd_funding.settings import SECRET_KEY
 import jwt
 from datetime import datetime, timedelta
 from django.conf import settings
-# Create your models here.
+from django.core.validators import RegexValidator
+
+# Create your models here. ?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,}
 
 
 class User(models.Model):
-    # main Data
-    first_name = models.CharField(max_length=150, blank=False)
-    last_name = models.CharField(max_length=150, blank=False)
+    # main Data  
+    first_name = models.CharField(max_length=150, blank=False, validators=[
+                                    RegexValidator(r'^[A-Za-z]+$')])
+    last_name = models.CharField(max_length=150, blank=False, validators=[
+                                    RegexValidator(r'^[A-Za-z]+$')])
     password = models.CharField(max_length=150, blank=False)
-    mobile_phone = models.CharField( max_length=150, blank=False)
-    email = models.EmailField( blank=False,unique=True)
-    profile_image = models.ImageField (max_length=255, upload_to="img/%y",null=True,blank=True)
-    ##additonal Data
-    country = models.CharField(max_length=30,null = True,blank=True)
-    Birth_date=models.DateField(null=True,blank=True)
-    facebook_profile=models.URLField(max_length = 200,null=True,blank=True)
-    is_verifications=models.BooleanField(default=False)
+    mobile_phone = models.CharField(blank=False, max_length=11, validators=[
+                                    RegexValidator(r'^01[0-2,5]{1}[0-9]{8}$')])
+    email = models.EmailField(blank=False, unique=True)
+    profile_image = models.ImageField(
+        max_length=255, upload_to="img/%y", null=True, blank=True)
+    # additonal Data
+    country = models.CharField(max_length=30, null=True, blank=True)
+    Birth_date = models.DateField(null=True, blank=True)
+    facebook_profile = models.URLField(max_length=200, null=True, blank=True)
+    is_verifications = models.BooleanField(default=False)
     is_authenticated = models.BooleanField(null=True)
+
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
     @property
     def token(self):
-        token = jwt.encode({'email':self.email,
-        'exp':datetime.utcnow()+timedelta(hours=24)},
-        settings.SECRET_KEY,algorithm='HS256')
+        token = jwt.encode({'email': self.email,
+                            'exp': datetime.utcnow()+timedelta(hours=24)},
+                           settings.SECRET_KEY, algorithm='HS256')
         return token

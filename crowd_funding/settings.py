@@ -42,10 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',  # for create api end point
     'rest_framework.authtoken',
-    'projects',
+    'projects.apps.ProjectsConfig',
     'user.apps.UserConfig',
     "corsheaders",
 ]
+
 
 
 MIDDLEWARE = [
