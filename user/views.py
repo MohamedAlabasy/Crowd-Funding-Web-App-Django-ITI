@@ -52,7 +52,6 @@ class RegisterApiView(GenericAPIView):
             return response.Response({"message_error": "password must match",
                                       'status': 0
                                       }, status=status.HTTP_400_BAD_REQUEST)
-        
         return response.Response({'message_error':serializer.errors.values(), 'status':0
                                   }, status=status.HTTP_400_BAD_REQUEST)
         

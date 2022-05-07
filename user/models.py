@@ -7,9 +7,9 @@ from django.core.validators import RegexValidator
 
 # Create your models here.
 
-
 class User(models.Model):
     # main Data  
+    ##me?fields=id,first_name,last_name,birthday,gender,email,picture,link,hometown
     first_name = models.CharField(max_length=150, blank=False, validators=[
                                     RegexValidator(r'^[A-Za-z]+$')])
     last_name = models.CharField(max_length=150, blank=False, validators=[
@@ -23,9 +23,10 @@ class User(models.Model):
     # additonal Data
     country = models.CharField(max_length=30, null=True, blank=True)
     Birth_date = models.DateField(null=True, blank=True)
-    facebook_profile = models.URLField(max_length=200, null=True, blank=True)
+    facebook_profile = models.URLField(max_length=3000, null=True, blank=True)
     is_verifications = models.BooleanField(default=False)
     is_authenticated = models.BooleanField(null=True)
+    auth_provider = models.CharField(max_length=255,blank=False,null=False,default='email')
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'projects.apps.ProjectsConfig',
     'user.apps.UserConfig',
     "corsheaders",
+    'social_auth'
 ]
 
 
@@ -65,6 +66,7 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
     "http://localhost:3000",
+    "http://localhost:5500",
 
 ]
 CORS_ALLOW_METHODS = [
@@ -155,7 +157,10 @@ AUTH_PASSWORD_VALIDATORS = [
 #     'DEFAULT_AUTHENTICATION_CLASSES': [
 #         'user.jwt.JWTAuthentication',
 #     ]
-# }
+# }2022-05-07
+REST_FRAMEWORK = {
+    "DATE_INPUT_FORMATS": ["%Y-%m-%d"],
+}
 
 
 LANGUAGE_CODE = 'en-us'
