@@ -1,21 +1,10 @@
-from pyexpat import model
 import re
-
-from django.forms import ValidationError
-from attr import field
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken,TokenError
-
 from .models import User
 from django.contrib.auth.hashers import make_password
 from projects.models import Projects, Donations
 from projects.serializers import getCategories, getTags, getProjects
-
-            # if not match:
-                # return response.Response({"password_error": "password Not strong"}, status=status.HTTP_400_BAD_REQUEST)
-
-            # else:
-                # print("Password invalid !!")            
 
 class RegisterSerializer(serializers.ModelSerializer):
     
@@ -56,7 +45,7 @@ class LoginSerializer(serializers.ModelSerializer):
     class Meta():
         model = User
         fields = ('email', 'password', 'id', 'token', 'first_name', 'last_name', 'mobile_phone',
-                  'email', 'profile_image', 'country', 'Birth_date', 'facebook_profile', 'is_verifications')
+                 'profile_image', 'country', 'Birth_date', 'facebook_profile', 'is_verifications')
         read_only_fields = ['token', 'id', 'first_name', 'last_name', 'mobile_phone',
                             'profile_image', 'country', 'Birth_date', 'facebook_profile', 'is_verifications']
 
