@@ -33,9 +33,6 @@ from django.urls import reverse
 
 
 # Create your views here.
-class CustomRedirect(HttpResponsePermanentRedirect):
-    
-    allowed_schemes = ['http', 'https']
 ############### Register api #################
 class RegisterApiView(GenericAPIView):
     serializer_class = RegisterSerializer
@@ -213,8 +210,8 @@ class LoginApiView(GenericAPIView):
 
 
 @api_view(['GET'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def user_profile(request, user_id):
 
     try:
@@ -239,8 +236,8 @@ def user_profile(request, user_id):
 
 
 @api_view(['GET'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def user_projects(request, user_id):
     try:
         query = Projects.objects.filter(owner_id=user_id).all()
@@ -269,8 +266,8 @@ def user_projects(request, user_id):
 
 
 @api_view(['GET'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def user_donations(request, user_id):
     try:
         query = Donations.objects.filter(user_id=user_id).all()
@@ -299,8 +296,8 @@ def user_donations(request, user_id):
 
 
 @api_view(['POST'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def update_user(request, user_id):
     query = User.objects.get(id=request.data['id'])
     serializer = updateProfile(instance=query, data=request.data)
@@ -325,8 +322,8 @@ def update_user(request, user_id):
 #=======================================================================================#
 
 @api_view(['DELETE'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def delete_user(request, user_id):
     try:
         User.objects.get(id=user_id).delete()
