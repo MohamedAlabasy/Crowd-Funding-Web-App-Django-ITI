@@ -8,7 +8,6 @@ class JWTAuthentication(BaseAuthentication):
         auth_header = get_authorization_header(request)
         auth_data = auth_header.decode('utf-8')
         auth_token = auth_data.split(" ")
-        print(auth_token)
         if len(auth_token) != 2:
             raise exceptions.AuthenticationFailed("No Token were given")
         token = auth_token[1]
