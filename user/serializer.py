@@ -5,6 +5,10 @@ from .models import User
 from django.contrib.auth.hashers import make_password
 from projects.models import Projects, Donations
 from projects.serializers import getCategories, getTags, getProjects
+from user.passwordResetToken import PasswordResetTokenGenerator
+from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from rest_framework.exceptions import AuthenticationFailed
 
 class RegisterSerializer(serializers.ModelSerializer):
     
@@ -57,7 +61,50 @@ class EmailVerificationSerializer(serializers.ModelSerializer):
     class Meta():
         model = User
         fields = ['token']
+####################################Reset password###############
 
+class ResetPasswordEmailRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField(min_length=2)
+
+    # redirect_url = serializers.CharField(max_length=500, required=False)
+
+    class Meta:
+        fields = ['email']
+
+
+class SetNewPasswordSerializer(serializers.Serializer):
+    new_password = serializers.CharField(
+        min_length=6, max_length=68, write_only=True)
+    token = serializers.CharField(
+        min_length=1, write_only=True)
+    uidb64 = serializers.CharField(
+        min_length=1, write_only=True)
+
+    class Meta:
+        fields = ['new_password', 'token', 'uidb64']
+
+    def validate(self, attrs):
+        try:
+            new_password = attrs.get('new_password')
+            
+            token = attrs.get('token')
+            uidb64 = attrs.get('uidb64')
+
+            id = force_str(urlsafe_base64_decode(uidb64))
+            user2=User.objects.get(id=id)
+            if not PasswordResetTokenGenerator().check_token(user2, token):
+                raise AuthenticationFailed('The reset link is invalid', 401)
+            print(new_password,id)
+            user2.password=make_password(new_password)
+            print(user2)
+
+            user2.save()
+
+
+            return (user2)
+        except Exception as e:
+            raise AuthenticationFailed('The reset link is invalid', 401)
+        return super().validate(attrs)
 #=======================================================================================#
 #			                            getUserProfile                                 	#
 #=======================================================================================#

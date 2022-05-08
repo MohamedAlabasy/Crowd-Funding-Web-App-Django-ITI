@@ -27,6 +27,7 @@ class User(models.Model):
     is_verifications = models.BooleanField(default=False)
     is_authenticated = models.BooleanField(null=True)
     auth_provider = models.CharField(max_length=255,blank=False,null=False,default='email')
+    last_login=models.DateTimeField(null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
