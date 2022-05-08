@@ -298,7 +298,7 @@ def user_donations(request, user_id):
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
-def update_user(request, user_id):
+def update_user(request):
     query = User.objects.get(id=request.data['id'])
     serializer = updateProfile(instance=query, data=request.data)
     if serializer.is_valid():
