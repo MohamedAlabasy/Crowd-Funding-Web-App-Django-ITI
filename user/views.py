@@ -91,7 +91,7 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
             data = {'email_body': email_body, 'to_email': user.email,
                     'email_subject': 'Reset your passsword'}
             Util.send_email(data)
-        return Response({'success': 'We have sent you a link to reset your password'}, status=status.HTTP_200_OK)
+            return Response({'success': 'We have sent you a link to reset your password'}, status=status.HTTP_200_OK)
 
 
 class PasswordTokenCheckAPI(generics.GenericAPIView):
@@ -138,8 +138,10 @@ class verifyEmail(views.APIView):
     def get(self, request):
         token = request.GET.get('token')
         try:
+            print("before decode")
             payload = jwt.decode(token, settings.SECRET_KEY)
             print(payload)
+            print("after decode")
             user = User.objects.get(id=payload['user_id'])
             if not user.is_verifications:
                 user.is_verifications = True
