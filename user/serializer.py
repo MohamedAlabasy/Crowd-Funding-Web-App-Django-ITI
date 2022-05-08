@@ -38,7 +38,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             password=make_password(validated_data['password']),
             mobile_phone=validated_data['mobile_phone'],
-            profile_image=validated_data['profile_image'],
+            profile_image=validated_data['profile_image']
         )
 
 

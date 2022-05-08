@@ -8,6 +8,9 @@ from .serializers import ProjectsTags, ProjectsSearchBarTags, ProjectsPictures, 
 from .models import Projects, Categories, Tags, Rates, Pictures
 
 
+
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def add_project_images(images, project_id):
     for image in images:
         data = ({
@@ -30,7 +33,8 @@ def add_project_images(images, project_id):
         })
         return Response(serializer, status=status.HTTP_201_CREATED)
 
-
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def add_project_tags(tags, project_id):
     print(tags)
     for tag in tags:
@@ -56,8 +60,8 @@ def add_project_tags(tags, project_id):
 
 
 @api_view(['POST'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def create_project(request):
     if not request.FILES.getlist('images'):
         serializer = ({
@@ -108,8 +112,8 @@ def create_project(request):
 
 
 @api_view(['POST'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def create_comment(request):
     serializer = createComment(data=request.data)
     if serializer.is_valid():
@@ -129,8 +133,8 @@ def create_comment(request):
 
 
 @api_view(['POST'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def reply_comment(request):
     serializer = CommentReply(data=request.data)
     if serializer.is_valid():
@@ -150,8 +154,8 @@ def reply_comment(request):
 
 
 @api_view(['POST'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def report_project(request):
     serializer = ReportProject(data=request.data)
     if serializer.is_valid():
@@ -171,8 +175,8 @@ def report_project(request):
 
 
 @api_view(['POST'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def report_comment(request):
     serializer = ReportsComment(data=request.data)
     if serializer.is_valid():
@@ -192,8 +196,8 @@ def report_comment(request):
 
 
 @api_view(['POST'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def rate_project(request, project_id):
     query = Projects.objects.get(id=project_id)
     serializer = RateProjects(instance=query, data=request.data)
@@ -214,8 +218,8 @@ def rate_project(request, project_id):
 
 
 @api_view(['DELETE'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def cancel_project(request, project_id):
     try:
         query = Projects.objects.get(id=project_id)
@@ -244,8 +248,6 @@ def cancel_project(request, project_id):
 
 
 @api_view(['GET'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
 def all_categories(request):
     try:
         query = Categories.objects.all()
@@ -270,8 +272,6 @@ def all_categories(request):
 
 
 @api_view(['GET'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
 def get_all_tags(request):
     try:
         query = Tags.objects.all()
@@ -393,6 +393,9 @@ def update_donate_project(project_id, paid_up):
 
 
 @api_view(['POST'])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
+
 def donate_project(request):
     serializer = DonateToProject(data=request.data)
     if serializer.is_valid():
@@ -421,6 +424,8 @@ def donate_project(request):
 
 
 @api_view(['POST'])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def rate_project(request):
     serializer = RateProjects(data=request.data)
     if serializer.is_valid():
@@ -543,6 +548,7 @@ def project_category(request, category_id):
 
 
 @api_view(['GET'])
+
 def search_bar_title(request, project_title):
     try:
         query = Projects.objects.get(title=project_title)
