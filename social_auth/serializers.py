@@ -6,5 +6,4 @@ class FacebookSocialAuthSerializer(serializers.ModelSerializer):
     auth_token = serializers.CharField()
     class Meta():
             model = User
-            fields = ('token','auth_token')
-            read_only_fields = ['token']
+            fields = ['auth_token']
