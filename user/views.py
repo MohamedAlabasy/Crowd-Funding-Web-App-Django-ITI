@@ -140,8 +140,10 @@ class verifyEmail(views.APIView):
     def get(self, request):
         token = request.GET.get('token')
         try:
+            print("before decode")
             payload = jwt.decode(token, settings.SECRET_KEY)
             print(payload)
+            print("after decode")
             user = User.objects.get(id=payload['user_id'])
             if not user.is_verifications:
                 user.is_verifications = True
