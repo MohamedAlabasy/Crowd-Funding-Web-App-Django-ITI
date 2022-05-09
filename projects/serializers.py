@@ -88,8 +88,8 @@ class getComments(serializers.ModelSerializer):
         model = Comments
         fields = (
             "comment",
-            "replies",
             "user",
+            "replies",
         )
 
 
