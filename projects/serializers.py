@@ -12,7 +12,10 @@ class getCategories(serializers.ModelSerializer):
 class getTags(serializers.ModelSerializer):
     class Meta:
         model = Tags
-        fields = "__all__"
+        fields = (
+            "id",
+            "tag"
+        )
 
 
 class getUser(serializers.ModelSerializer):
@@ -31,10 +34,21 @@ class getUser(serializers.ModelSerializer):
         )
 
 
+class ProjectsPictures(serializers.ModelSerializer):
+    class Meta:
+        model = Pictures
+        fields = (
+            "id",
+            "image"
+        )
+
+
 class getProjects(serializers.ModelSerializer):
     category = getCategories(read_only=True)
     tags = serializers.StringRelatedField(many=True)
-    images = serializers.StringRelatedField(many=True)
+    # images = serializers.StringRelatedField(many=True)
+    images = ProjectsPictures(many=True)
+    tags = getTags(many=True)
     owner = getUser(read_only=True)
 
     class Meta:
@@ -165,12 +179,6 @@ class updateRateProjects(serializers.ModelSerializer):
         fields = ['rate']
 
 
-class ProjectsPictures(serializers.ModelSerializer):
-    class Meta:
-        model = Pictures
-        fields = '__all__'
-
-
 class ProjectsTags(serializers.ModelSerializer):
     class Meta:
         model = Tags
@@ -182,4 +190,8 @@ class ProjectsSearchBarTags(serializers.ModelSerializer):
 
     class Meta:
         model = Tags
-        fields = '__all__'
+        fields = (
+            "id",
+            # "tag",
+            "project"
+        )
