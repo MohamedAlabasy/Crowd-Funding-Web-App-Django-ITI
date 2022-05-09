@@ -34,6 +34,12 @@ class getUser(serializers.ModelSerializer):
         )
 
 
+class AddProjectsPictures(serializers.ModelSerializer):
+    class Meta:
+        model = Pictures
+        fields = '__all__'
+
+
 class ProjectsPictures(serializers.ModelSerializer):
     class Meta:
         model = Pictures
