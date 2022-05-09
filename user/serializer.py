@@ -14,7 +14,11 @@ from rest_framework.exceptions import AuthenticationFailed
 class RegisterSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(
+<<<<<<< HEAD
         write_only=True)
+=======
+        write_only=True, required=True)
+>>>>>>> 121b39e011d559b03c740cac08e7132777d82308
 
     confirm_password = serializers.CharField(
         write_only=True)
