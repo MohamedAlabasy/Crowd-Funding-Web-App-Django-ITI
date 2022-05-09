@@ -18,7 +18,17 @@ class getTags(serializers.ModelSerializer):
 class getUser(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "mobile_phone",
+            "email",
+            "profile_image",
+            "country",
+            "Birth_date",
+            "facebook_profile",
+        )
 
 
 class getProjects(serializers.ModelSerializer):
@@ -45,6 +55,41 @@ class getProjects(serializers.ModelSerializer):
             "category",
             "owner",
             "tags"
+        )
+
+
+class GetShortUserData(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "profile_image",
+        )
+
+
+class GetReplies(serializers.ModelSerializer):
+    user = GetShortUserData(read_only=True)
+
+    class Meta:
+        model = Replies
+        fields = (
+            "replie",
+            "user",
+        )
+
+
+class getComments(serializers.ModelSerializer):
+    user = GetShortUserData(read_only=True)
+    replies = GetReplies(many=True)
+
+    class Meta:
+        model = Comments
+        fields = (
+            "comment",
+            "replies",
+            "user",
         )
 
 

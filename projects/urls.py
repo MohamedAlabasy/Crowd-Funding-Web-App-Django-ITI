@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import latest_admin_selected, report_comment, highest_rate, search_bar_tag, search_bar_title, project_category, all_project, add_project_images, get_all_tags, donate_project, get_latest_projects, show_project, create_project, create_comment, reply_comment, report_project, rate_project, cancel_project, all_categories
-# project_pictures
+from .views import all_comments, latest_admin_selected, report_comment, highest_rate, search_bar_tag, search_bar_title, project_category, all_project, add_project_images, get_all_tags, donate_project, get_latest_projects, show_project, create_project, create_comment, reply_comment, report_project, rate_project, cancel_project, all_categories
+# project_pictures ,
 #=======================================================================================#
 #			                                URLS                                     	#
 #=======================================================================================#
@@ -28,4 +28,6 @@ urlpatterns = [
     path('search/title/<str:project_title>', search_bar_title),
     path('search/tag/<str:project_tag>', search_bar_tag),
     path('latestAdminSelected', latest_admin_selected),
+
+    path('comments/<int:project_id>', all_comments),
 ]
