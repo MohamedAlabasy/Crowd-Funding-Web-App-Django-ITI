@@ -26,7 +26,7 @@ class Projects(models.Model):
     total_target = models.IntegerField()
     current_donation = models.IntegerField()
     start_campaign = models.DateTimeField(default=timezone.now)
-    end_campaign = models.DateTimeField()
+    end_campaign = models.DateField()
     created_at = models.DateTimeField(default=timezone.now)
     selected_at_by_admin = models.DateTimeField(default=timezone.now)
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
