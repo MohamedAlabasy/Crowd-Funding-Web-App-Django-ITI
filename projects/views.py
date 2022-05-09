@@ -606,3 +606,23 @@ def highest_rate(request):
                 "message": "There is no rate match with this hightest rate projects"
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+def latest_admin_selected(request):
+    try:
+        query = Projects.objects.all().order_by('selected_at_by_admin').reverse()[:5]
+        serializer = getProjects(query, many=True).data
+        serializer = ({
+            "status": 1,
+            'count': len(serializer),
+            "data": serializer,
+        })
+        return Response(serializer, status=status.HTTP_200_OK)
+    except:
+        serializer = (
+            {
+                "status": 0,
+                "message": "There is no projects match with this time"
+            })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
