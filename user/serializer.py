@@ -14,7 +14,15 @@ from rest_framework.exceptions import AuthenticationFailed
 class RegisterSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(
+<<<<<<< HEAD
         write_only=True)
+=======
+<<<<<<< HEAD
+        write_only=True)
+=======
+        write_only=True, required=True)
+>>>>>>> 121b39e011d559b03c740cac08e7132777d82308
+>>>>>>> 91b33e9fe73d8f49cf3f491b4a31dc09cb295a15
 
     confirm_password = serializers.CharField(
         write_only=True)
@@ -113,19 +121,17 @@ class SetNewPasswordSerializer(serializers.Serializer):
 class getUserProfile(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
-        # fields = [
-        #     'id',
-        #     'first_name',
-        #     'last_name',
-        #     'password',
-        #     'mobile_phone',
-        #     'profile_image',
-        #     'Birth_date',
-        #     'facebook_profile',
-        #     'country'
-        # ]
-
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "mobile_phone",
+            "email",
+            "profile_image",
+            "country",
+            "Birth_date",
+            "facebook_profile",
+        )
 
 #=======================================================================================#
 #			                            getUserProjects                                	#
@@ -172,20 +178,6 @@ class getUserDonations(serializers.ModelSerializer):
         model = Donations
 
         fields = '__all__'
-        # fields = [
-        #     'id',
-        #     'title',
-        #     'details',
-        #     'rate',
-        #     'total_target',
-        #     'current_donation',
-        #     'start_campaign',
-        #     'end_campaign',
-        #     'created_at',
-        #     'category',
-        #     'owner',
-        #     'tag',
-        # ]
 
 #=======================================================================================#
 #			                               update                                   	#
@@ -198,11 +190,9 @@ class updateProfile(serializers.ModelSerializer):
         fields = [
             "first_name",
             "last_name",
-            "password",
             "mobile_phone",
             "profile_image",
             "country",
             "Birth_date",
             "facebook_profile",
-            "is_verifications",
         ]
