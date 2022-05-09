@@ -4,7 +4,7 @@ from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
 from user import myjwt
-from .serializers import getComments, ProjectsTags, ProjectsSearchBarTags, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, ReportsComment, updateRateProjects, RateProjects, getProjects
+from .serializers import AddProjectsPictures, getComments, ProjectsTags, ProjectsSearchBarTags, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, ReportsComment, updateRateProjects, RateProjects, getProjects
 from .models import Projects, Categories, Tags, Rates, Pictures, Comments
 
 
@@ -16,7 +16,7 @@ def add_project_images(images, project_id):
             "project": project_id,
             "image": image
         })
-        serializer = ProjectsPictures(data=data)
+        serializer = AddProjectsPictures(data=data)
         if serializer.is_valid():
             serializer.save()
         else:
@@ -60,8 +60,8 @@ def add_project_tags(tags, project_id):
 
 
 @api_view(['POST'])
-@authentication_classes([myjwt.JWTAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([myjwt.JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def create_project(request):
     if not request.FILES.getlist('images'):
         serializer = ({
