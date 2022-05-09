@@ -31,7 +31,6 @@ import os
 from django.urls import reverse
 
 
-
 # Create your views here.
 ############### Register api #################
 class RegisterApiView(GenericAPIView):
@@ -63,11 +62,12 @@ class RegisterApiView(GenericAPIView):
             return response.Response({"message_error": "password must match",
                                       'status': 0
                                       }, status=status.HTTP_400_BAD_REQUEST)
-        
-        return response.Response({'message_error':serializer.errors, 'status':0
+
+        return response.Response({'message_error': serializer.errors, 'status': 0
                                   }, status=status.HTTP_400_BAD_REQUEST)
-        
+
 #########################Reset Password###########################
+
 
 class RequestPasswordResetEmail(generics.GenericAPIView):
     serializer_class = ResetPasswordEmailRequestSerializer
@@ -91,9 +91,8 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
             data = {'email_body': email_body, 'to_email': user.email,
                     'email_subject': 'Reset your passsword'}
             Util.send_email(data)
-            return Response({'success': 'We have sent you a link to reset your password','status':1}, status=status.HTTP_200_OK)
-        return Response({'message_error': 'Email invalid please try again','status':0}, status=status.HTTP_400_BAD_REQUEST)
-
+            return Response({'success': 'We have sent you a link to reset your password', 'status': 1}, status=status.HTTP_200_OK)
+        return Response({'message_error': 'Email invalid please try again', 'status': 0}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PasswordTokenCheckAPI(generics.GenericAPIView):
@@ -101,26 +100,22 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
 
     def get(self, request, uidb64, token):
 
-
         try:
             id = smart_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(id=id)
-            
+
             if not PasswordResetTokenGenerator().check_token(user, token):
-                 return Response({'error':'Token is not valid please request another one'},status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Token is not valid please request another one'}, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({'sucess':True,'massege':'Credrntials Valid','uidb64':uidb64,'token':token},status=status.HTTP_200_OK)
+            return Response({'sucess': True, 'massege': 'Credrntials Valid', 'uidb64': uidb64, 'token': token}, status=status.HTTP_200_OK)
 
-            
-           
         except DjangoUnicodeDecodeError as identifier:
-        
-                if not PasswordResetTokenGenerator().check_token(user,token):
-                    return Response({'error':'Token is not valid please request a new one'})
-                    
-        except UnboundLocalError as e:
-                return Response({'error': 'Token is not valid, please request a new one'}, status=status.HTTP_400_BAD_REQUEST)
 
+            if not PasswordResetTokenGenerator().check_token(user, token):
+                return Response({'error': 'Token is not valid please request a new one'})
+
+        except UnboundLocalError as e:
+            return Response({'error': 'Token is not valid, please request a new one'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SetNewPasswordAPIView(generics.GenericAPIView):
@@ -130,7 +125,6 @@ class SetNewPasswordAPIView(generics.GenericAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response({'success': True, 'message': 'Password reset success'}, status=status.HTTP_200_OK)
-
 
 
 ############## Activate Email #################
@@ -304,7 +298,8 @@ def user_donations(request, user_id):
 @permission_classes([IsAuthenticated])
 def update_user(request):
     query = User.objects.get(id=request.data['id'])
-    serializer = updateProfile(instance=query, data=request.data)
+    serializer = updateProfile(data=request.data, instance=query,)
+    print(serializer)
     if serializer.is_valid():
         serializer.save()
         serializer = ({
