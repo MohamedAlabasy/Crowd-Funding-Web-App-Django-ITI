@@ -60,8 +60,8 @@ def add_project_tags(tags, project_id):
 
 
 @api_view(['POST'])
-# @authentication_classes([myjwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([myjwt.JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def create_project(request):
     if not request.FILES.getlist('images'):
         serializer = ({
