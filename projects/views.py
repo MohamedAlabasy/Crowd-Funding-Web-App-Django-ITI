@@ -8,7 +8,6 @@ from .serializers import ProjectsTags, ProjectsSearchBarTags, ProjectsPictures, 
 from .models import Projects, Categories, Tags, Rates, Pictures
 
 
-
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def add_project_images(images, project_id):
@@ -32,6 +31,7 @@ def add_project_images(images, project_id):
             "message": "pictures added successfully",
         })
         return Response(serializer, status=status.HTTP_201_CREATED)
+
 
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -395,7 +395,6 @@ def update_donate_project(project_id, paid_up):
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
-
 def donate_project(request):
     serializer = DonateToProject(data=request.data)
     if serializer.is_valid():
@@ -548,7 +547,6 @@ def project_category(request, category_id):
 
 
 @api_view(['GET'])
-
 def search_bar_title(request, project_title):
     try:
         query = Projects.objects.get(title=project_title)
@@ -559,7 +557,6 @@ def search_bar_title(request, project_title):
         })
         return Response(serializer, status=status.HTTP_200_OK)
     except:
-
         serializer = (
             {
                 "status": 0,
@@ -607,10 +604,12 @@ def highest_rate(request):
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(['GET'])
 def latest_admin_selected(request):
     try:
-        query = Projects.objects.all().order_by('selected_at_by_admin').reverse()[:5]
+        query = Projects.objects.all().order_by(
+            'selected_at_by_admin').reverse()[:5]
         serializer = getProjects(query, many=True).data
         serializer = ({
             "status": 1,
@@ -625,4 +624,3 @@ def latest_admin_selected(request):
                 "message": "There is no projects match with this time"
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
-

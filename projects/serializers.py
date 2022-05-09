@@ -18,7 +18,17 @@ class getTags(serializers.ModelSerializer):
 class getUser(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "mobile_phone",
+            "email",
+            "profile_image",
+            "country",
+            "Birth_date",
+            "facebook_profile",
+        )
 
 
 class getProjects(serializers.ModelSerializer):
