@@ -58,6 +58,41 @@ class getProjects(serializers.ModelSerializer):
         )
 
 
+class GetShortUserData(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "profile_image",
+        )
+
+
+class GetReplies(serializers.ModelSerializer):
+    user = GetShortUserData(read_only=True)
+
+    class Meta:
+        model = Replies
+        fields = (
+            "replie",
+            "user",
+        )
+
+
+class getComments(serializers.ModelSerializer):
+    user = GetShortUserData(read_only=True)
+    replies = GetReplies(many=True)
+
+    class Meta:
+        model = Comments
+        fields = (
+            "comment",
+            "replies",
+            "user",
+        )
+
+
 class getSingleProject(serializers.ModelSerializer):
     category = getCategories(read_only=True)
     tag = getTags(many=True, read_only=True)

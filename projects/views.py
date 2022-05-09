@@ -4,8 +4,8 @@ from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.decorators import api_view
 from rest_framework import serializers, status
 from user import myjwt
-from .serializers import ProjectsTags, ProjectsSearchBarTags, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, ReportsComment, updateRateProjects, RateProjects, getProjects
-from .models import Projects, Categories, Tags, Rates, Pictures
+from .serializers import getComments, ProjectsTags, ProjectsSearchBarTags, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, ReportsComment, updateRateProjects, RateProjects, getProjects
+from .models import Projects, Categories, Tags, Rates, Pictures, Comments
 
 
 @authentication_classes([myjwt.JWTAuthentication])
@@ -328,8 +328,9 @@ def get_all_tags(request):
 @api_view(['GET'])
 def show_project(request, project_id):
     try:
-        query = Projects.objects.prefetch_related('images').get(id=project_id)
+        query = Projects.objects.get(id=project_id)
         serializer = getProjects(query).data
+
         serializer = ({
             "status": 1,
             "data": serializer,
@@ -622,5 +623,26 @@ def latest_admin_selected(request):
             {
                 "status": 0,
                 "message": "There is no projects match with this time"
+            })
+        return Response(serializer, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def all_comments(request, project_id):
+    try:
+        query = Comments.objects.filter(project_id=project_id).all()
+        serializer = getComments(query, many=True).data
+
+        serializer = ({
+            "status": 1,
+            'count': len(serializer),
+            "data": serializer
+        })
+        return Response(serializer, status=status.HTTP_200_OK)
+    except:
+        serializer = (
+            {
+                "status": 0,
+                "message": "There is no Comments to show"
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)

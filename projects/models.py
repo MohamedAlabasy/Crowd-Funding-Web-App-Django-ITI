@@ -67,23 +67,26 @@ class Tags(models.Model):
 
 class Comments(models.Model):
     comment = models.TextField()
-    project = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    project = models.ForeignKey(
+        Projects, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return (f"{self.user.first_name} {self.user.last_name} on {self.project.title}")
 
-#=======================================================================================#
-#			                            Replies                                     	#
-#=======================================================================================#
+        #=======================================================================================#
+        #			                            Replies                                     	#
+        #=======================================================================================#
 
 
 class Replies(models.Model):
     replie = models.TextField()
-    comment = models.ForeignKey(Comments, on_delete=models.CASCADE)
+    comment = models.ForeignKey(
+        Comments, on_delete=models.CASCADE, related_name='replies')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
+        # return self.replie
         return (f"{self.user.first_name} {self.user.last_name} on Commint id = {self.comment.id}")
 
 #=======================================================================================#
