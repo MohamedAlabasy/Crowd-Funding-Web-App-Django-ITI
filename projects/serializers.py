@@ -95,6 +95,7 @@ class GetReplies(serializers.ModelSerializer):
     class Meta:
         model = Replies
         fields = (
+            'id',
             "replie",
             "user",
         )
@@ -107,6 +108,7 @@ class getComments(serializers.ModelSerializer):
     class Meta:
         model = Comments
         fields = (
+            'id',
             "comment",
             "user",
             "replies",
