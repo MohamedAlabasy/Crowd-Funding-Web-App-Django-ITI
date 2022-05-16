@@ -1,5 +1,6 @@
 from rest_framework.response import Response
-from rest_framework.decorators import permission_classes, authentication_classes,api_view ,IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes, authentication_classes,api_view
 from rest_framework import serializers, status
 from user import myjwt
 from .serializers import AddProjectsPictures, getComments, ProjectsTags, ProjectsSearchBarTags, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, ReportsComment, updateRateProjects, RateProjects, getProjects
