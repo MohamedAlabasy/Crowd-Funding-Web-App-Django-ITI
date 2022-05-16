@@ -1,24 +1,19 @@
 from django.db import models
 from django.utils import timezone
 from user.models import User
-
-
 #=======================================================================================#
 #			                            Categone                                    	#
 #=======================================================================================#
-
-
 class Categories(models.Model):
     name = models.CharField(max_length=250, unique=True)
 
     def __str__(self):
         return self.name
 
+
 #=======================================================================================#
 #			                            Project                                     	#
 #=======================================================================================#
-
-
 class Projects(models.Model):
     title = models.CharField(max_length=250, unique=True)
     details = models.TextField()
@@ -35,11 +30,10 @@ class Projects(models.Model):
     def __str__(self):
         return self.title
 
+
 #=======================================================================================#
 #			                            Pictures                                     	#
 #=======================================================================================#
-
-
 class Pictures(models.Model):
     image = models.ImageField(max_length=255, upload_to="img/%y")
     project = models.ForeignKey(
@@ -51,8 +45,6 @@ class Pictures(models.Model):
 #=======================================================================================#
 #			                              Tags                                         	#
 #=======================================================================================#
-
-
 class Tags(models.Model):
     tag = models.CharField(max_length=250)
     project = models.ForeignKey(
@@ -60,11 +52,11 @@ class Tags(models.Model):
 
     def __str__(self):
         return self.tag
+    
+    
 #=======================================================================================#
 #			                            comments                                     	#
 #=======================================================================================#
-
-
 class Comments(models.Model):
     comment = models.TextField()
     project = models.ForeignKey(
@@ -74,11 +66,10 @@ class Comments(models.Model):
     def __str__(self):
         return (f"{self.user.first_name} {self.user.last_name} on {self.project.title}")
 
-        #=======================================================================================#
-        #			                            Replies                                     	#
-        #=======================================================================================#
 
-
+#=======================================================================================#
+#			                            Replies                                     	#
+#=======================================================================================#
 class Replies(models.Model):
     replie = models.TextField()
     comment = models.ForeignKey(
@@ -86,14 +77,12 @@ class Replies(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        # return self.replie
         return (f"{self.user.first_name} {self.user.last_name} on Commint id = {self.comment.id}")
+
 
 #=======================================================================================#
 #			                            ReportsProject                                  #
 #=======================================================================================#
-
-
 class ReportsProject(models.Model):
     reason = models.TextField(blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -102,11 +91,10 @@ class ReportsProject(models.Model):
     def __str__(self):
         return f" {self.user.first_name} {self.user.last_name} on report {self.project.title} "
 
+
 #=======================================================================================#
 #			                            ReportsComment                                 	#
 #=======================================================================================#
-
-
 class ReportsComment(models.Model):
     reason = models.TextField(blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -115,11 +103,10 @@ class ReportsComment(models.Model):
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} on report id = {self.comment.id}"
 
+
 #=======================================================================================#
 #			                            Donations                                     	#
 #=======================================================================================#
-
-
 class Donations(models.Model):
     paid_up = models.IntegerField()
     project = models.ForeignKey(Projects, on_delete=models.CASCADE)
@@ -128,11 +115,10 @@ class Donations(models.Model):
     def __str__(self):
         return (f"{self.user} Donate to {self.project}")
 
+
 #=======================================================================================#
 #			                            Rates                                        	#
 #=======================================================================================#
-
-
 class Rates(models.Model):
     rate = models.IntegerField()
     project = models.ForeignKey(Projects, on_delete=models.CASCADE)

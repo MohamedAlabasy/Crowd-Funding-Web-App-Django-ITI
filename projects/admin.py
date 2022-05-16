@@ -6,7 +6,6 @@ from .models import Projects, Categories, Tags, Projects, Pictures, Comments, Re
 #=======================================================================================#
 admin.site.register(Categories)
 admin.site.register(Tags)
-# admin.site.register(Projects)
 admin.site.register(Pictures)
 admin.site.register(Comments)
 admin.site.register(Replies)

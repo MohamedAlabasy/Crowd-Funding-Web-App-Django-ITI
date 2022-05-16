@@ -1,13 +1,13 @@
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes, authentication_classes
-from rest_framework.decorators import api_view
+from rest_framework.decorators import permission_classes, authentication_classes,api_view ,IsAuthenticated
 from rest_framework import serializers, status
 from user import myjwt
 from .serializers import AddProjectsPictures, getComments, ProjectsTags, ProjectsSearchBarTags, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, ReportsComment, updateRateProjects, RateProjects, getProjects
 from .models import Projects, Categories, Tags, Rates, Pictures, Comments
 
-
+#=======================================================================================#
+#			                       create_project                                       #
+#=======================================================================================#
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def add_project_images(images, project_id):
@@ -110,6 +110,9 @@ def create_project(request):
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
+#=======================================================================================#
+#			                        create_comment                                      #
+#=======================================================================================#
 
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
@@ -131,7 +134,9 @@ def create_comment(request):
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                       reply_comment                                        #
+#=======================================================================================#
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -152,7 +157,9 @@ def reply_comment(request):
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                        report_project                                      #
+#=======================================================================================#
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -173,7 +180,9 @@ def report_project(request):
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                          report_comment                                    #
+#=======================================================================================#
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -194,7 +203,9 @@ def report_comment(request):
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                            rate                                         	#
+#=======================================================================================#
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -216,7 +227,9 @@ def rate_project(request, project_id):
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                          cancel_project                                    #
+#=======================================================================================#
 @api_view(['DELETE'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -246,7 +259,9 @@ def cancel_project(request, project_id):
                 })
             return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                         all_categories                                     #
+#=======================================================================================#
 @api_view(['GET'])
 def all_categories(request):
     try:
@@ -270,7 +285,9 @@ def all_categories(request):
                 })
     return Response(serializer)
 
-
+#=======================================================================================#
+#			                       get_all_tags                                         #
+#=======================================================================================#
 @api_view(['GET'])
 def get_all_tags(request):
     try:
@@ -294,37 +311,9 @@ def get_all_tags(request):
                 })
     return Response(serializer)
 
-
-# @api_view(['GET'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
-# def show_similar_project(request, project_title):
-#     try:
-#         query = Projects.objects.get(tag=project_title)
-#         serializer = getSingleProject(query).data
-
-#         query_similar_project = Projects.objects.filter(
-#             tag=serializer['tag'][0]).all()[:4]
-#         serializer_similar_project = getSingleProject(
-#             query_similar_project, many=True).data
-#         serializer = ({
-#             "status": 1,
-#             "similar_project_count": len(serializer_similar_project),
-#             "project": serializer,
-#             'similar_project': serializer_similar_project,
-#         })
-#         return Response(serializer, status=status.HTTP_200_OK)
-#     except:
-
-#         serializer = ([
-#             {
-#                 "status": 0,
-#                 "message": f"There is no tags with this id = {project_id}",
-#             }
-#         ])
-#     return Response(serializer, status=status.HTTP_404_NOT_FOUND)
-
-
+#=======================================================================================#
+#			                           show_project                                     #
+#=======================================================================================#
 @api_view(['GET'])
 def show_project(request, project_id):
     try:
@@ -345,10 +334,10 @@ def show_project(request, project_id):
             })
     return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                     get_latest_projects                                   	#
+#=======================================================================================#
 @api_view(['GET'])
-# @authentication_classes([jwt.JWTAuthentication])
-# @permission_classes([IsAuthenticated])
 def get_latest_projects(request):
     try:
         query = Projects.objects.all().order_by('created_at').reverse()[:5]
@@ -369,7 +358,9 @@ def get_latest_projects(request):
             })
     return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                            donate_project                                  #
+#=======================================================================================#
 def update_donate_project(project_id, paid_up):
     query = Projects.objects.get(id=project_id)
     if paid_up + query.current_donation > query.total_target:
@@ -391,7 +382,6 @@ def update_donate_project(project_id, paid_up):
             "errors": serializer.errors
         })
         raise serializers.ValidationError(serializer)
-
 
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
@@ -422,7 +412,9 @@ def donate_project(request):
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                        rate_project                                       	#
+#=======================================================================================#
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -484,28 +476,9 @@ def update_rate_project(current_rate, project_id):
         raise serializers.ValidationError(serializer)
 
 
-# @api_view(['GET'])
-# def project_pictures(request, project_id):
-#     # print(project_id)
-#     try:
-#         query = Pictures.objects.filter(project_id=project_id).all()
-#         serializer = ProjectsPictures(query, many=True).data
-#         serializer = ({
-#             "status": 1,
-#             "data": serializer,
-#         })
-#         # print(serializer)
-#         return Response(serializer, status=status.HTTP_200_OK)
-#     except:
-
-#         serializer = (
-#             {
-#                 "status": 0,
-#                 "message": f"There is no images with this id = {project_id}",
-#             })
-#         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
-
-
+#=======================================================================================#
+#			                           all_project                                      #
+#=======================================================================================#
 @api_view(['GET'])
 def all_project(request):
     try:
@@ -525,11 +498,12 @@ def all_project(request):
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                            project_category                                #
+#=======================================================================================#
 @api_view(['GET'])
 def project_category(request, category_id):
     try:
-        # query =Projects.objects.get(id=project_id)
         query = Projects.objects.filter(category_id=category_id).all()
         serializer = getProjects(query, many=True).data
         serializer = ({
@@ -546,7 +520,9 @@ def project_category(request, category_id):
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                       search_bar_title                                     #
+#=======================================================================================#
 @api_view(['GET'])
 def search_bar_title(request, project_title):
     try:
@@ -565,7 +541,9 @@ def search_bar_title(request, project_title):
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                            rate                                         	#
+#=======================================================================================#
 @api_view(['GET'])
 def search_bar_tag(request, project_tag):
     try:
@@ -585,7 +563,9 @@ def search_bar_tag(request, project_tag):
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                            highest_rate                                    #
+#=======================================================================================#
 @api_view(['GET'])
 def highest_rate(request):
     try:
@@ -605,7 +585,9 @@ def highest_rate(request):
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                       latest_admin_selected                                #
+#=======================================================================================#
 @api_view(['GET'])
 def latest_admin_selected(request):
     try:
@@ -626,7 +608,9 @@ def latest_admin_selected(request):
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
-
+#=======================================================================================#
+#			                            all_comments                                   	#
+#=======================================================================================#
 @api_view(['GET'])
 def all_comments(request, project_id):
     try:
