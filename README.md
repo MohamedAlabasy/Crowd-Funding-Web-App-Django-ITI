@@ -63,7 +63,7 @@ python manage.py createsuperuser
 </p>
 
 `Step 5` :  Download front end angular source code : 
-<h3 align="center">https://github.com/Hala-salah77/Crowd-Funding</h3>
+<h3 align="center">https://github.com/Hala-salah77/crowd-fund</h3>
 
 ## Contributors
 <table>
