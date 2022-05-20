@@ -59,7 +59,7 @@ class RegisterApiView(GenericAPIView):
                 return response.Response({'first_name': serializer.data['first_name'], 'last_name': serializer.data['last_name'], 'mobile_phone': serializer.data['mobile_phone'], 'email': serializer.data['email'], 'profile_image': serializer.data['profile_image'],
                                           'status': 1
                                           }, status=status.HTTP_201_CREATED)
-            return response.Response({"message_error": "password must match",
+            return response.Response({"message_error":[{"password": "password must match"}],
                                       'status': 0
                                       }, status=status.HTTP_400_BAD_REQUEST)
 
