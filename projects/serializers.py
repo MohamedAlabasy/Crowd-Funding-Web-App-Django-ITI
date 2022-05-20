@@ -52,7 +52,6 @@ class ProjectsPictures(serializers.ModelSerializer):
 class getProjects(serializers.ModelSerializer):
     category = getCategories(read_only=True)
     tags = serializers.StringRelatedField(many=True)
-    # images = serializers.StringRelatedField(many=True)
     images = ProjectsPictures(many=True)
     tags = getTags(many=True)
     owner = getUser(read_only=True)
@@ -200,6 +199,5 @@ class ProjectsSearchBarTags(serializers.ModelSerializer):
         model = Tags
         fields = (
             "id",
-            # "tag",
             "project"
         )

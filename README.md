@@ -7,7 +7,7 @@ The aim of the project: Create a web platform for starting fundraise projects in
 ## To run this project :   
 
 `Step 1` :  
-&nbsp; &nbsp; &nbsp; &nbsp; You must have installed virtual server i.e XAMPP on your PC (for Windows). This System in PHP with source code   
+&nbsp; &nbsp; &nbsp; &nbsp; You must have installed virtual server i.e XAMPP on your PC (for Windows). This System in Django with source code   
 &nbsp; &nbsp; &nbsp; &nbsp; is free to download, Use for educational purposes only! .  
 
 `Step 2` :  Download the source code .
@@ -17,6 +17,8 @@ git clone https://github.com/MohamedAlabasy/Crowd-Funding-Web-App-Django-ITI.git
 
 
 `Step 3` :  Enter the project file then ...
+<h3 align="center"> Windows </h3>
+
 ```
 py -m venv .venv
 ```
@@ -29,6 +31,21 @@ pip install -r requirements.txt
 ```
 winpty python manage.py runserver
 ```
+<h3 align="center"> Ubuntu </h3>
+
+```
+python3 -m venv .venv
+```
+```
+source .venv/bin/activate
+```
+```
+pip install -r requirements.txt
+```
+```
+python3 manage.py runserver
+```
+
 `Step 4` :  
 &nbsp; &nbsp; &nbsp; &nbsp; Create database call `crowd_funding` then ...
 ```
@@ -45,6 +62,8 @@ python manage.py createsuperuser
    <img src="https://user-images.githubusercontent.com/93389016/166452361-3d7cc5a1-d101-496f-ad43-5d00be81efb4.png" alt="Database ERD">
 </p>
 
+`Step 5` :  Download front end angular source code : 
+<h3 align="center">https://github.com/Hala-salah77/crowd-fund</h3>
 
 ## Contributors
 <table>

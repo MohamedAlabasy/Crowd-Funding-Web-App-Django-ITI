@@ -261,8 +261,6 @@ def user_projects(request, user_id):
 #=======================================================================================#
 #                                  view user Donations                                  #
 #=======================================================================================#
-
-
 @api_view(['GET'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
