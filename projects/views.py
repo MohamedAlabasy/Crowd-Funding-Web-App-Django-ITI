@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes, authentication_classes,api_view
+from rest_framework.decorators import permission_classes, authentication_classes, api_view
 from rest_framework import serializers, status
 from user import myjwt
 from .serializers import AddProjectsPictures, getComments, ProjectsTags, ProjectsSearchBarTags, ProjectsPictures, updateDonateProjects, DonateToProject, createProjects, getTags, getSingleProject, getCategories, createComment, CommentReply, ReportProject, ReportsComment, updateRateProjects, RateProjects, getProjects
@@ -72,7 +72,6 @@ def create_project(request):
             }
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
-
     if not request.POST.getlist('tags'):
         serializer = ({
             "status": 0,
@@ -81,7 +80,6 @@ def create_project(request):
             }
         })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
-
     data = ({
         "title": request.data['title'],
         "details": request.data['details'],
@@ -115,6 +113,7 @@ def create_project(request):
 #			                        create_comment                                      #
 #=======================================================================================#
 
+
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -138,6 +137,8 @@ def create_comment(request):
 #=======================================================================================#
 #			                       reply_comment                                        #
 #=======================================================================================#
+
+
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -161,6 +162,8 @@ def reply_comment(request):
 #=======================================================================================#
 #			                        report_project                                      #
 #=======================================================================================#
+
+
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -184,6 +187,8 @@ def report_project(request):
 #=======================================================================================#
 #			                          report_comment                                    #
 #=======================================================================================#
+
+
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -207,6 +212,8 @@ def report_comment(request):
 #=======================================================================================#
 #			                            rate                                         	#
 #=======================================================================================#
+
+
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -231,6 +238,8 @@ def rate_project(request, project_id):
 #=======================================================================================#
 #			                          cancel_project                                    #
 #=======================================================================================#
+
+
 @api_view(['DELETE'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -263,6 +272,8 @@ def cancel_project(request, project_id):
 #=======================================================================================#
 #			                         all_categories                                     #
 #=======================================================================================#
+
+
 @api_view(['GET'])
 def all_categories(request):
     try:
@@ -289,6 +300,8 @@ def all_categories(request):
 #=======================================================================================#
 #			                       get_all_tags                                         #
 #=======================================================================================#
+
+
 @api_view(['GET'])
 def get_all_tags(request):
     try:
@@ -315,6 +328,8 @@ def get_all_tags(request):
 #=======================================================================================#
 #			                           show_project                                     #
 #=======================================================================================#
+
+
 @api_view(['GET'])
 def show_project(request, project_id):
     try:
@@ -327,7 +342,6 @@ def show_project(request, project_id):
         })
         return Response(serializer, status=status.HTTP_200_OK)
     except:
-
         serializer = (
             {
                 "status": 0,
@@ -338,12 +352,13 @@ def show_project(request, project_id):
 #=======================================================================================#
 #			                     get_latest_projects                                   	#
 #=======================================================================================#
+
+
 @api_view(['GET'])
 def get_latest_projects(request):
     try:
         query = Projects.objects.all().order_by('created_at').reverse()[:5]
         serializer = getProjects(query, many=True).data
-
         serializer = ({
             "status": 1,
             'count': len(serializer),
@@ -351,7 +366,6 @@ def get_latest_projects(request):
         })
         return Response(serializer, status=status.HTTP_200_OK)
     except:
-
         serializer = (
             {
                 "status": 0,
@@ -362,6 +376,8 @@ def get_latest_projects(request):
 #=======================================================================================#
 #			                            donate_project                                  #
 #=======================================================================================#
+
+
 def update_donate_project(project_id, paid_up):
     query = Projects.objects.get(id=project_id)
     if paid_up + query.current_donation > query.total_target:
@@ -383,6 +399,7 @@ def update_donate_project(project_id, paid_up):
             "errors": serializer.errors
         })
         raise serializers.ValidationError(serializer)
+
 
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
@@ -416,6 +433,8 @@ def donate_project(request):
 #=======================================================================================#
 #			                        rate_project                                       	#
 #=======================================================================================#
+
+
 @api_view(['POST'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -466,9 +485,7 @@ def update_rate_project(current_rate, project_id):
     serializer = updateRateProjects(instance=project_query, data=data)
     if serializer.is_valid():
         serializer.save()
-
         return
-
     else:
         serializer = ({
             "status": 0,
@@ -495,13 +512,15 @@ def all_project(request):
         serializer = (
             {
                 "status": 0,
-                "message": 'no projets to show',
+                "message": 'no projects to show',
             })
         return Response(serializer, status=status.HTTP_404_NOT_FOUND)
 
 #=======================================================================================#
 #			                            project_category                                #
 #=======================================================================================#
+
+
 @api_view(['GET'])
 def project_category(request, category_id):
     try:
@@ -513,7 +532,6 @@ def project_category(request, category_id):
         })
         return Response(serializer, status=status.HTTP_200_OK)
     except:
-
         serializer = (
             {
                 "status": 0,
@@ -524,6 +542,8 @@ def project_category(request, category_id):
 #=======================================================================================#
 #			                       search_bar_title                                     #
 #=======================================================================================#
+
+
 @api_view(['GET'])
 def search_bar_title(request, project_title):
     try:
@@ -545,6 +565,8 @@ def search_bar_title(request, project_title):
 #=======================================================================================#
 #			                            rate                                         	#
 #=======================================================================================#
+
+
 @api_view(['GET'])
 def search_bar_tag(request, project_tag):
     try:
@@ -567,6 +589,8 @@ def search_bar_tag(request, project_tag):
 #=======================================================================================#
 #			                            highest_rate                                    #
 #=======================================================================================#
+
+
 @api_view(['GET'])
 def highest_rate(request):
     try:
@@ -589,6 +613,8 @@ def highest_rate(request):
 #=======================================================================================#
 #			                       latest_admin_selected                                #
 #=======================================================================================#
+
+
 @api_view(['GET'])
 def latest_admin_selected(request):
     try:
@@ -612,12 +638,13 @@ def latest_admin_selected(request):
 #=======================================================================================#
 #			                            all_comments                                   	#
 #=======================================================================================#
+
+
 @api_view(['GET'])
 def all_comments(request, project_id):
     try:
         query = Comments.objects.filter(project_id=project_id).all()
         serializer = getComments(query, many=True).data
-
         serializer = ({
             "status": 1,
             'count': len(serializer),
