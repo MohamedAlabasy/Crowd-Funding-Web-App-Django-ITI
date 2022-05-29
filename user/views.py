@@ -59,7 +59,7 @@ class RegisterApiView(GenericAPIView):
                 return response.Response({'first_name': serializer.data['first_name'], 'last_name': serializer.data['last_name'], 'mobile_phone': serializer.data['mobile_phone'], 'email': serializer.data['email'], 'profile_image': serializer.data['profile_image'],
                                           'status': 1
                                           }, status=status.HTTP_201_CREATED)
-            return response.Response({"message_error":[{"password": "password must match"}],
+            return response.Response({"message_error": [{"password": "password must match"}],
                                       'status': 0
                                       }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -211,7 +211,6 @@ class LoginApiView(GenericAPIView):
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def user_profile(request, user_id):
-
     try:
         query = User.objects.get(id=user_id)
         serializer = getUserProfile(instance=query, read_only=True)
@@ -261,6 +260,8 @@ def user_projects(request, user_id):
 #=======================================================================================#
 #                                  view user Donations                                  #
 #=======================================================================================#
+
+
 @api_view(['GET'])
 @authentication_classes([myjwt.JWTAuthentication])
 @permission_classes([IsAuthenticated])
@@ -326,7 +327,7 @@ def delete_user(request, user_id):
         User.objects.get(id=user_id).delete()
         serializer = ({
             "status": 1,
-            "message": "Deleted successfly",
+            "message": "Deleted Successfully",
         })
         return Response(serializer, status=status.HTTP_202_ACCEPTED)
     except:
